@@ -7,8 +7,6 @@ import AppNavigator from './components/AppNavigator';
 
 
 const App = () => {
-
-
     return (
       <>
           <NavigationContainer>
