@@ -5,7 +5,6 @@ import GamePage from './pages/GamePage';
 import HomePage from './pages/HomePage';
 import AppNavigator from './components/AppNavigator';
 
-
 const App = () => {
     return (
       <>
