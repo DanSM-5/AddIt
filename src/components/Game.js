@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import RandomNumber from './RandomNumber';
 import { PLAYING, LOST, WON } from './GameStatus';
 import AnimatedProgressWheel from 'react-native-progress-wheel';
-
+import DifficultySettings from './DifficultySettings';
+import NumbersCalculator from './NumbersCalculator';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const topMessage = {
@@ -15,11 +16,12 @@ const topMessage = {
 
 class Game extends React.Component {
     static propTypes = {
-        randomNumberCount: PropTypes.number.isRequired,
-        initialSeconds: PropTypes.number.isRequired,
+        difficulty: PropTypes.string.isRequired,
         onPlayAgain: PropTypes.func.isRequired,
+        onVictory: PropTypes.func.isRequired,
         setLost: PropTypes.func.isRequired,
         timeoutToClear: PropTypes.number.isRequired,
+        gameInfo: PropTypes.object.isRequired,
     };
 
     constructor(props) {
@@ -29,16 +31,17 @@ class Game extends React.Component {
             gameStatus: PLAYING,
         }
         this.score = this.props.gameInfo.score;
-        //console.log(this.props);
+        this.difficultySettings = DifficultySettings(this.props.difficulty);
+        this.time = this.difficultySettings.time;
+        [this.target, this.randomNumbers, this.randomSelection] =  NumbersCalculator(this.difficultySettings);
     }
 
     componentDidMount(){
-        //console.log(this.props.setLost);
         this.props.setLost(() => this.setState({ gameStatus: LOST }));
     }
 
     componentDidUpdate( prevProps, prevState) {
-        if (prevState.selectedIds !== this.state.selectedIds ) {
+        if (prevState.selectedIds !== this.state.selectedIds && prevState.gameStatus !== LOST) {
             this.setState({ gameStatus: this.calcGameStatus(this.state)});
         }
 
@@ -49,6 +52,10 @@ class Game extends React.Component {
                 this.props.onVictory();
             }
         }
+    }
+    
+    componentWillUnmount() {
+        clearTimeout(this.props.timeoutToClear);
     }
 
     calcGameStatus = (state) => {    
@@ -66,33 +73,6 @@ class Game extends React.Component {
             return PLAYING;
         }
     };
-
-    componentWillUnmount() {
-        clearTimeout(this.props.timeoutToClear);
-    }
-    
-    randomNumbers = Array.from({ length: this.props.randomNumberCount })
-                        .map(() => 1 + Math.floor(10 * Math.random()));
-
-    randomSelection = Array.from({ length: (() => {
-                            const numOfDigits = 1 + Math.floor(Math.random() * this.props.randomNumberCount)
-                            if (numOfDigits === 1) {
-                                return 2;
-                            } else if (numOfDigits === this.props.randomNumberCount){
-                                return this.props.randomNumberCount - 1
-                            }
-                            return numOfDigits;
-                        })()})
-                        .reduce((acc, curr) => {
-                            let index;
-                            do{
-                                index = Math.floor(Math.random() * this.props.randomNumberCount)
-                            }while(acc.some(o => o.index === index));
-
-                            return [...acc, {value: this.randomNumbers[index], index: index}];
-                        },[]);
-
-    target = this.randomSelection.reduce((acc, curr) => acc + curr.value, 0);
 
     isNumberSelected = (index) => {
         return this.state.selectedIds.indexOf(index) >= 0;
@@ -120,6 +100,7 @@ class Game extends React.Component {
         <>
             <View style={styles.container}>
                 <View style={styles.targetContainer}>
+                    <Text style={styles.difficulty}>{this.props.difficulty}</Text>
                     <Text style={[styles.target, styles[`STATUS_${gameStatus}`]]}>
                         {topMessage[gameStatus]} {this.target}
                     </Text>
@@ -145,7 +126,7 @@ class Game extends React.Component {
                                     width={15}
                                     progress={100}
                                     animateFromValue={0}
-                                    duration={this.props.initialSeconds * 1000}
+                                    duration={this.time * 1000}
                                     color="#2089dc"
                                     backgroundColor="#3d5875"
                                   />
@@ -161,19 +142,12 @@ class Game extends React.Component {
                 { gameStatus === LOST
                     ?   <View style={styles.answer}>
                             <Text>Answer: </Text>
-                                {this.randomSelection.map((o, key) => 
-                            <Text key={key}>{o.value}</Text>)} 
+                                {this.randomSelection.map((num, key) => 
+                            <Text key={key}>{num}</Text>)} 
                         </View>
                     : null
                 }
-                
-                {/* <View style={styles.answer}>
-                    <Text>Answer: </Text>
-                    {this.randomSelection.map((o, key) => 
-                        <Text key={key}>{o.value}</Text>)} 
-                </View> */}
             </View>
-            {/* <Text>{gameStatus}</Text> */}
         </>
         );
     };
@@ -183,6 +157,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fbeec1',
         flex: 1,
+    },
+    difficulty: {
+        fontSize: 20,
     },
     targetContainer: {
         alignItems: "center",
@@ -201,7 +178,6 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         justifyContent: "space-around",
         alignContent: "center",
-        //backgroundColor: 'blue',
     },
     answer: {
         flexDirection: "row",
@@ -209,7 +185,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
     },
     endGameArea: {
-        //backgroundColor: 'white',
         flex: 1,
         alignItems: "center",
         justifyContent: "center",

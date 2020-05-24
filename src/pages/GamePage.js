@@ -4,7 +4,7 @@ import DifficultySettings from '../components/DifficultySettings';
 
 const GamePage = ({ navigation, route }) => {
 
-    const { time , count } = DifficultySettings(route.params.difficulty);
+    const { time } = DifficultySettings(route.params.difficulty);
     const [state, setState] = useState({ gameId: 1 });
     const [gameInfo, setGameInfo] = useState({ score: 0, game: 1 });
     const resetGame = () => {
@@ -25,8 +25,9 @@ const GamePage = ({ navigation, route }) => {
             <Game key={state.gameId} 
                 onPlayAgain={resetGame}
                 onVictory={addPoint}
-                randomNumberCount={count} 
-                initialSeconds={time} 
+                difficulty={route.params.difficulty}
+                // randomNumberCount={count} 
+                // initialSeconds={time} 
                 setLost={setLost}
                 timeoutToClear={timeoutToClear}
                 gameInfo={gameInfo}

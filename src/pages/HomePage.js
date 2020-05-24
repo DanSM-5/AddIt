@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { EASY, MEDIUM, HARD } from '../components/Difficulties';
 
@@ -19,7 +19,7 @@ const HomePage = ({ navigation }) => {
                         <Text style={styles.text}>
                             {val}
                         </Text>
-                </TouchableOpacity>)
+                    </TouchableOpacity>)
             }
         </View>
     )
