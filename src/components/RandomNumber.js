@@ -12,7 +12,6 @@ class RandomNumber extends Component {
         isActive: PropTypes.bool.isRequired,
     }
     handlePress = () =>{
-        console.log(' Boton precionado ' );
         if (this.props.isSelected) {
             this.props.onPressDisabled(this.props.id);
         }else{
@@ -41,6 +40,7 @@ const styles = StyleSheet.create({
     random: {
         textAlign: "center",
         fontSize: 40,
+        fontWeight: "bold",
         color: 'white',
     },
     'number-container':{
@@ -51,6 +51,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginVertical: 20,
         justifyContent: "center",
+        borderColor: 'black',
+        borderStyle: "solid",
+        borderWidth: 6,
     },
     selected: {
         opacity: 0.2,

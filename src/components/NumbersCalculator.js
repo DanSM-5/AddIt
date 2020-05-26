@@ -10,7 +10,7 @@ const NumbersCalculator = ({ length, minToSelect, maxToSelect, minDigit = 1, max
 
     const chosenFromSource = selectRandom( randomSource, minToSelect, maxToSelect );
 
-    const target = getTarget( chosenFromSource );
+    const target = getTarget( chosenFromSource, randomSource );
 
     return [target, randomSource, chosenFromSource];
 }
@@ -38,7 +38,10 @@ const getRandomUnrepeatedIndex = ( arr, max ) => {
 
 const getRandomBetween = (from, to) => from + Math.floor(Math.random() * (to - from + 1));
 
-export const getTarget = ( arr ) => arr.reduce((acc, curr) => acc + curr, 0);  
+export const getTarget = ( arrToAdd, arrToCompare ) => { 
+    const total = arrToAdd.reduce((acc, curr) => acc + curr, 0);
+    return arrToCompare.some(num => num === total) ? total * 2 : total;
+};  
 
 export const test = () => {
     console.log('Test of NumbersCalculetor.js');

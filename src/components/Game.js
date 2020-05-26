@@ -7,6 +7,12 @@ import AnimatedProgressWheel from 'react-native-progress-wheel';
 import DifficultySettings from './DifficultySettings';
 import NumbersCalculator from './NumbersCalculator';
 
+/**
+ * OLD VERSION OF THE GAME
+ * 
+ * Saved as reference
+ */
+
 const screenWidth = Math.round(Dimensions.get('window').width);
 const topMessage = {
     PLAYING: 'Sum:',

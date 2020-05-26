@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: 40,
         color: 'white',
+        borderColor: 'black',
+        borderStyle: "solid",
+        borderWidth: 6,
     },
     container: {
         backgroundColor: '#fbeec1',
