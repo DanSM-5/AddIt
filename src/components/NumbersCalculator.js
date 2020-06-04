@@ -10,9 +10,9 @@ const NumbersCalculator = ({ length, minToSelect, maxToSelect, minDigit = 1, max
 
     const chosenFromSource = selectRandom( randomSource, minToSelect, maxToSelect );
 
-    const target = getTarget( chosenFromSource, randomSource );
+    const [target, answer] = getTargetAndAnswer( chosenFromSource, randomSource, maxToSelect );
 
-    return [target, randomSource, chosenFromSource];
+    return [target, randomSource, answer];
 }
 
 
@@ -38,9 +38,22 @@ const getRandomUnrepeatedIndex = ( arr, max ) => {
 
 const getRandomBetween = (from, to) => from + Math.floor(Math.random() * (to - from + 1));
 
-export const getTarget = ( arrToAdd, arrToCompare ) => { 
-    const total = arrToAdd.reduce((acc, curr) => acc + curr, 0);
-    return arrToCompare.some(num => num === total) ? total * 2 : total;
+export const getTargetAndAnswer = ( arrToAdd, arrToCompare, maxLength ) => { 
+    const answerArr = [...arrToAdd];
+    while(true){
+        const total = answerArr.reduce((acc, curr) => acc + curr, 0);
+        const isAnyInArr = arrToCompare.some(num => num === total);
+        if (isAnyInArr) {
+            answerArr.push(total);
+            continue;
+        }
+        if (answerArr.length > maxLength) {
+            const min = Math.min(...answerArr);
+            answerArr.splice(answerArr.indexOf(min), 1);
+            continue;
+        }
+        return [total, answerArr];
+    }
 };  
 
 export const test = () => {

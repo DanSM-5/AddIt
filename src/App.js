@@ -4,19 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import GamePage from './pages/GamePage';
 import HomePage from './pages/HomePage';
 import AppNavigator from './components/AppNavigator';
+import MenuButton from './components/MenuButton';
+import MenuNavigation from './components/MenuNavigation';
+import { Button, Alert } from 'react-native';
 
 const App = () => {
     return (
       <>
           <NavigationContainer>
-            <AppNavigator.Navigator>
-              <AppNavigator.Screen name="Home" component={HomePage} 
-                options={{ title: 'Home' }}
-              />
-              <AppNavigator.Screen name="Game" component={GamePage} 
-                options={{ title: 'Game' }}
-              />
-            </AppNavigator.Navigator>
+            <MenuNavigation />
           </NavigationContainer>
       </>
     );
