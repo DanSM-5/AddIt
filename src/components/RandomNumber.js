@@ -1,39 +1,28 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-class RandomNumber extends Component {
-    static propTypes = {
-        number: PropTypes.number.isRequired,
-        isSelected: PropTypes.bool.isRequired,
-        onPress: PropTypes.func.isRequired,
-        onPressDisabled: PropTypes.func.isRequired,
-        id: PropTypes.number.isRequired,
-        isActive: PropTypes.bool.isRequired,
-    }
-    handlePress = () =>{
-        if (this.props.isSelected) {
-            this.props.onPressDisabled(this.props.id);
-        }else{
-            this.props.onPress(this.props.id);
-        }
-    };
+const RandomNumber = ({ number, isSelected, onPress, onPressDisabled, id, isActive }) => {
 
-    render() {
-        return (
-            <>
-                <TouchableOpacity 
-                    onPress={this.handlePress} 
-                    disabled={!this.props.isActive}
-                    style={styles['number-container']}
-                >
-                    <Text style={[styles.random, this.props.isSelected && styles.selected, !this.props.isActive && styles.selected]}>
-                        {this.props.number}
-                    </Text>
-                </TouchableOpacity>
-            </>
-        );
+    const handlePress = () => {
+        if (isSelected) {
+            onPressDisabled(id);
+        } else{
+            onPress(id);
+        }
     }
+
+    return(<TouchableOpacity 
+        onPress={handlePress} 
+        disabled={!isActive}
+        style={styles['number-container']}
+    >
+        <Text 
+            style={[styles.random, 
+                isSelected && styles.selected, 
+                !isActive && styles.selected]}>
+            {number}
+        </Text>
+    </TouchableOpacity>);
 }
 
 const styles = StyleSheet.create({
@@ -47,7 +36,7 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: '#659dbd',
+        backgroundColor: '#2089dc',
         marginHorizontal: 20,
         marginVertical: 20,
         justifyContent: "center",

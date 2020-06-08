@@ -1,42 +1,81 @@
 import React, { useState, useEffect, memo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const NumericTimer = ({ timeLimit }) => {
+const NumericTimer = ({ timeLimit, onTimeEnd }) => {
 
     const [ timer, setTimer ] = useState(timeLimit / 1000);
-    const [intervalId, setIntervalId] = useState(0);
 
     useEffect(() => {
-        if (intervalId === 0) {
-            setIntervalId( setInterval(() => {
-                setTimer( (prevState) => prevState - 1 );
-            }, 1000));
-        }
-        if (timer === 0) {
-            clearInterval(intervalId);
-        }
-
+        const intervalId = setInterval(() => {
+            setTimer((prevState) => {   
+                const updatedTime = prevState - 1;
+                if (updatedTime === 0){
+                    clearInterval(intervalId);
+                    onTimeEnd();
+                }
+                if (updatedTime < 0) {
+                    return prevState
+                }
+                return updatedTime;
+            });
+        }, 1000);
         return () => clearInterval(intervalId);
-    }, [intervalId]);
+    }, []);
+
+    const calcTimerStyle = () => {
+        const calcTimeWord = () => {
+            const progress = timer / (timeLimit / 1000);
+            console.log(progress);
+            if (progress >= 0.5) {
+                return 'Full';
+            }else if (progress >= 0.2){
+                return 'Half';
+            }else { return 'No' }
+        }
+        const word = calcTimeWord();
+        return [`text${word}Time`,`container${word}Time`];
+    }
+
+    const [ textStyle, containerStyle ] =  calcTimerStyle();
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>{timer}</Text>
-        </View>
-    );
+    <View style={[styles.container, styles[containerStyle]]}>
+        <Text style={[styles.text, styles[textStyle]]}>{timer}</Text>
+    </View>);
 };
 
 const styles = StyleSheet.create({
     text: {
         fontSize: 40,
         fontWeight: "bold",
-        color: 'black',
     },
     container: {
-        width: 80,
-        height: 80,
+        width: 100,
+        height: 60,
         justifyContent: "center",
         alignItems: "center",
+        borderRadius: 10,
+        borderColor: 'black',
+        borderStyle: "solid",
+        borderWidth: 3,
+    },
+    containerFullTime:{
+        backgroundColor: '#2089dc',
+    },
+    textFullTime:{
+        color: 'white'
+    },
+    containerHalfTime:{
+        backgroundColor: '#ffd300',
+    },
+    textHalfTime:{
+        color: 'black'
+    },
+    containerNoTime:{
+        backgroundColor: 'red',
+    },
+    textNoTime:{
+        color: 'black'
     },
 });
 

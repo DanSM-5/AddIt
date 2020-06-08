@@ -1,19 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Dimensions} from 'react-native';
-
-
-const topMessage = {
-    PLAYING: 'Sum:',
-    LOST: 'Fail:',
-    WON: 'Win:',
-}
+import LanguageContext from './LanguageContext';
 
 const GameHeader = ({ status, target, score, gameNumber, difficulty, isPortrait }) => {
-
+    const lang = useContext(LanguageContext).language;
     const { width } = Dimensions.get('window');
     const dynamicStyles = StyleSheet.create({
         targetPortrait:{
-            width: width * 0.8
+            width: width * 0.8,
         },
         targetLandscape: {
             width: width * 0.15,
@@ -21,29 +15,27 @@ const GameHeader = ({ status, target, score, gameNumber, difficulty, isPortrait 
     });
 
     return (
-        <>
-            <View
-                style={styles.container}
+    <View style={styles.container}>
+        <View style={[styles.targetContainer,
+                !isPortrait && styles.targetContainerLandsCape]}
+        >
+            <Text style={styles.difficulty}>
+                {lang.difficulties[difficulty]}
+            </Text>
+            <Text 
+                style={[styles.target, 
+                !isPortrait && styles.targetLandscape,
+                isPortrait ? dynamicStyles.targetPortrait : dynamicStyles.targetLandscape, 
+                styles[`STATUS_${status}`]]}
             >
-                <View style={[styles.targetContainer,
-                        !isPortrait && styles.targetContainerLandsCape]}
-                >
-                    <Text style={styles.difficulty}>{difficulty}</Text>
-                    <Text 
-                    style={[styles.target, 
-                            !isPortrait && styles.targetLandscape,
-                            isPortrait ? dynamicStyles.targetPortrait : dynamicStyles.targetLandscape, 
-                            styles[`STATUS_${status}`]]}>
-                        {topMessage[status]} {target}
-                    </Text>
-                </View>
-                <View style={isPortrait ? styles.info : styles.infoLandscape}>
-                        <Text>Score: {score}</Text>
-                        <Text>Games: {gameNumber}</Text>
-                </View>  
-            </View>
-        </>
-    );
+                {lang.topMessage[status]} {target}
+            </Text>
+        </View>
+        <View style={isPortrait ? styles.info : styles.infoLandscape}>
+                <Text>{ lang.score }: { score }</Text>
+                <Text>{ lang.games }: { gameNumber }</Text>
+        </View>  
+    </View>);
 };
 
 const styles = StyleSheet.create({
@@ -71,10 +63,11 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderStyle: "solid",
         borderWidth: 2,
+        paddingVertical: 3,
     },
     targetLandscape:{
         fontSize: 25,
-
+        marginHorizontal: 3,
     },
     info: {
         flexDirection: "row",
@@ -89,10 +82,10 @@ const styles = StyleSheet.create({
         paddingTop: 10,
     },
     STATUS_WON: {
-        backgroundColor: 'green',
+        backgroundColor: '#66cc00',
     },
     STATUS_PLAYING: {  
-        backgroundColor: '#659dbd',
+        backgroundColor: '#2089dc',
         color: 'white',
     },
     STATUS_LOST: {

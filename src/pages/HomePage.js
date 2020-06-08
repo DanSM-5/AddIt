@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { EASY, MEDIUM, HARD } from '../components/Difficulties';
+import React, { useState, useContext } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { isPortrait } from '../js/screenOrientation';
+import LanguageContext from '../components/LanguageContext';
+import {
+    Menu,
+    MenuOptions,
+    MenuTrigger,
+  } from 'react-native-popup-menu'
+import InputMenuOption from '../components/InputMenuOption';
 
-const difficulty = [EASY, MEDIUM, HARD];
-const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
-
-// const setScreen = (func) => func();
-// Dimensions.addEventListener('change', () => setScreen());
 const HomePage = ({ navigation }) => {
     const [ portraitOrientation, setPortraitOrientation ] = useState(true);
+    const [ open, setOpen ] = useState(false);
+    const { difficulties } = useContext(LanguageContext).language;
+    const lang = useContext(LanguageContext).language;
 
     const onOrientationChanged = () => {
         if (isPortrait()) {
@@ -19,6 +22,49 @@ const HomePage = ({ navigation }) => {
             setPortraitOrientation(false);
         }
     }
+
+    const onContinue = (settings) => {
+        setOpen(false);
+        navigation.navigate('Game', {difficulty: 'CUSTOM', settings});
+    }
+
+    const onCancel = () => {
+        setOpen(false);
+    }
+
+    const difficultyButtons = () => Object.keys(difficulties)
+        .map((dif, index) => dif !== 'CUSTOM'
+            ? <TouchableOpacity
+                key={index}
+                onPress={() => navigation.navigate('Game', {difficulty: dif})}
+                style={[styles.button, portraitOrientation 
+                    ? dynamicStyles.btnPortrait 
+                    : dynamicStyles.btnLandscape]}
+            >
+                <Text style={styles.text}>
+                    {difficulties[dif]}
+                </Text>
+            </TouchableOpacity>
+            : <Menu 
+                key={index}
+                opened={open}
+                onBackdropPress={() => setOpen(false)}
+            >
+                <TouchableOpacity
+                    style={[styles.button, portraitOrientation 
+                        ? dynamicStyles.btnPortrait 
+                        : dynamicStyles.btnLandscape]}
+                    onPress={() => setOpen(true)}
+                >
+                    <Text style={styles.text}>
+                        {difficulties[dif]}
+                    </Text>
+                </TouchableOpacity>
+                <MenuTrigger />
+                <MenuOptions>                       
+                    <InputMenuOption lang={lang} onCancel={onCancel} onContinue={onContinue}/>
+                </MenuOptions>
+            </Menu>);
 
     const { width, height } = Dimensions.get('window');
 
@@ -33,24 +79,11 @@ const HomePage = ({ navigation }) => {
         },
     });
 
-    return (
-        <View style={styles.container}
-            onLayout={onOrientationChanged}
-        >
-            { 
-                difficulty.map((val, index) => 
-                    <TouchableOpacity
-                        key={val}
-                        onPress={() => navigation.navigate('Game', {difficulty: val})}
-            style={[styles.button, portraitOrientation ? dynamicStyles.btnPortrait : dynamicStyles.btnLandscape ]}
-                    >
-                        <Text style={styles.text}>
-                            {val}
-                        </Text>
-                    </TouchableOpacity>)
-            }
+    return (<ScrollView contentContainerStyle={styles.scrollScreen}>
+        <View style={styles.container} onLayout={onOrientationChanged}>
+            {difficultyButtons()}
         </View>
-    )
+    </ScrollView>);
 }
 
 const styles = StyleSheet.create({
@@ -59,9 +92,7 @@ const styles = StyleSheet.create({
         fontSize: 50,
     },
     button: {
-        backgroundColor: '#659dbd',
-        // height: Math.round(Dimensions.get('window').width) * 0.15,
-        // width: Math.round(Dimensions.get('window').height) * 0.8,
+        backgroundColor: '#2089dc',
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 40,
@@ -69,6 +100,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderStyle: "solid",
         borderWidth: 6,
+        marginVertical: 20,
     },
     container: {
         backgroundColor: '#fbeec1',
@@ -77,6 +109,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-around",
         alignContent: "center",
+    },
+    scrollScreen:{
+        flexGrow:1,
+    },
+    scrollView:{
+        flexGrow:1,
+        marginTop: 15,
     },
 });
 

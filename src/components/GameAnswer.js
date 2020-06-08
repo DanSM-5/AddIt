@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import LanguageContext from './LanguageContext';
 
 const GameAnswer = ({ answerNumbers, isPortrait = true }) => {
+    const lang = useContext(LanguageContext).language;
     return (
         <View style={styles.answer}>
-            <Text>{isPortrait ? "Answer" : "A" }: </Text>
+            <Text>{isPortrait ? lang.answer : lang.a }: </Text>
                 {answerNumbers.map((num, key) => 
                 key === answerNumbers.length - 1
                 ? <Text key={key}>{num}</Text>

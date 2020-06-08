@@ -1,6 +1,4 @@
-import { EASY, MEDIUM, HARD } from './Difficulties';
-
-const DifficultySettings = {
+export default {
     EASY : {
         time: 10, 
         length: 6,
@@ -26,5 +24,3 @@ const DifficultySettings = {
         maxDigit: 15,
     },
 };
-
-export default DifficultySettings;

@@ -1,18 +1,17 @@
-
 import AsyncStorage from '@react-native-community/async-storage';
 
-const KEY = 'timerOptions';
+const KEY = 'languageOptions';
 
-export const getTimerOption = async () => {
+export const getLanguageOption = async () => {
     try {
         const value = await AsyncStorage.getItem(KEY);
-        return value === null ? 'Circular' : value;
+        return value === null ? 'English' : value;
     } catch (error) {
         console.log(error);
     }
 }
 
-export const setTimerOption = async (option) => {
+export const setLanguageOption = async (option) => {
     try {
         await AsyncStorage.setItem(KEY, option);
     } catch (error) {

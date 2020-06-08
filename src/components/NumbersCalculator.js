@@ -1,4 +1,4 @@
-const NumbersCalculator = ({ length, minToSelect, maxToSelect, minDigit = 1, maxDigit = 10 }) => {
+const NumbersCalculator = ({ length, minToSelect, maxToSelect, minDigit, maxDigit }) => {
     if (typeof(length) !== 'number') {
         throw "length argument is NaN";
     }
@@ -56,9 +56,8 @@ export const getTargetAndAnswer = ( arrToAdd, arrToCompare, maxLength ) => {
     }
 };  
 
-export const test = () => {
+export const test = (length = 10, minToSelect = 2, maxToSelect = 5, minDigit = 1, maxDigit = 10) => {
     console.log('Test of NumbersCalculetor.js');
-    const length = 10, minToSelect = 2, maxToSelect = 5, minDigit = 1, maxDigit = 10;
     console.log(`The values are:`);
     console.table({
         length: length,
@@ -80,6 +79,7 @@ export const test = () => {
         });
 
         answer = prompt('Print another table(Y/N):');
+        answer = answer === null ? 'n' : answer;
         
     }while(answer.toLowerCase() === 'y');
 }

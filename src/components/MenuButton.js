@@ -1,17 +1,13 @@
 import React from 'react';
-import { TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
+import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 
 const MenuButton = ({ navigation, onPress, activeBorder = true }) => {
-    return (
-        <>
-            <TouchableOpacity
-                style={activeBorder ? styles.borderTouch : styles.regularTouch}
-                onPress={() => onPress()}
-            >
-                <Image style={styles.image} source={require('../../images/menu.webp')} />
-            </TouchableOpacity>
-        </>
-    );
+    return (<TouchableOpacity
+        style={activeBorder ? styles.borderTouch : styles.regularTouch}
+        onPress={() => onPress()}
+    >
+        <Image style={styles.image} source={require('../../images/menu.webp')} />
+    </TouchableOpacity>);
 };
 
 const styles = StyleSheet.create({
@@ -22,7 +18,6 @@ const styles = StyleSheet.create({
     borderTouch: {
         width: 30,
         height: 30,
-        //backgroundColor: 'orange',
         borderRadius: 15,
         borderColor: 'black',
         borderWidth: 2,

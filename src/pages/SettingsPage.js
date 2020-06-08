@@ -1,66 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useState, useEffect, useContext, memo } from 'react';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import { getTimerOption, setTimerOption} from '../js/timerOptions';
+import { getLanguageOption, setLanguageOption} from '../js/languageOptions';
 import { Card, CheckBox } from 'react-native-elements';
-
-const GRAPHIC = 'graphic';
-const NUMERIC = 'numeric';
+import LanguageContext from '../components/LanguageContext';
 
 const SettingsPage = () => {
-    const [timerValue, setTimerValue] = useState('');
+    const [timer, setTimer] = useState('');
+    const [language, setLanguage] = useState('');
+    const sysConfig = useContext(LanguageContext);
+    const lang = sysConfig.language;
+
     useEffect(() => {
         const setInitial = async () => {
-            const current = await getTimerOption();
-            if (current === null) {
-                setTimerValue(GRAPHIC);
-                await setTimerOption(GRAPHIC);
-            }else{
-                setTimerValue(current);
+            const timerOption = await getTimerOption();
+            if (timerOption !== timer) {
+                setTimer(timerOption);
+            }
+            
+            const languageOption = await getLanguageOption();
+            if (language !== languageOption) {
+                setLanguage(languageOption);
             }
         };
-        
-        if (timerValue === '') {
-            setInitial();
-        }
+        setInitial();
     }, []);
-
-    const onPressRadioButton = async (type) => {
-        setTimerValue(type);
+    
+    const onPressTimerOption = async (type) => {
+        setTimer(type);
         await setTimerOption(type);
     }
+    const onLanguageValueChanged = async (lang) => {
+        setLanguage(lang);
+        await setLanguageOption(lang);
+        sysConfig.setLanguage(lang);
+    }
 
+    const generateTimerOptions = () => Object.keys(lang.timerOptions)
+        .map((o, index) => (
+            <View key={index} >
+                <CheckBox 
+                    checked={timer === o}
+                    center
+                    title={lang.timerOptions[o]}
+                    checkedIcon='dot-circle-o'
+                    uncheckedIcon='circle-o'
+                    onPress={async () => await onPressTimerOption(o)}
+                />
+            </View>
+        ));
+
+    const generatePickerItems = 
+        () => Object.keys(lang.languages)
+            .reduce((acc, curr) => curr === language ? [curr, ...acc] : [...acc, curr],[])
+            .map((l, index) => (<Picker.Item label={lang.languages[l]} value={l} key={index}/>));
+    
+    if (language === '') {
+        return <Text>Loading...</Text>
+    }
+    
     return (
+    <ScrollView style={styles.container}>
         <View style={styles.center}>
             <Card
                 title="Display Timer"
-            >
+                >
                 <Text style={styles.text}>
-                    Set the type of timer to be displayed in game.
+                    {lang.timerDescription }
                 </Text>
                 <View>
-                    <View>
-                        <CheckBox 
-                            checked={timerValue === GRAPHIC}
-                            center
-                            title="Circular"
-                            checkedIcon='dot-circle-o'
-                            uncheckedIcon='circle-o'
-                            onPress={async () => await onPressRadioButton(GRAPHIC)}
-                        />
-                    </View>
-                    <View>
-                        <CheckBox 
-                            checked={timerValue === NUMERIC}
-                            center
-                            title="Numeric"
-                            checkedIcon='dot-circle-o'
-                            uncheckedIcon='circle-o'
-                            onPress={async () => await onPressRadioButton(NUMERIC)}
-                        />
-                    </View>
+                    {generateTimerOptions()}
                 </View>
             </Card>
+            <Card
+                title={lang.language}
+                >
+                <Text>{lang.languageDescription}</Text>
+                <Picker
+                    selectedValue={language}
+                    onValueChange={async (itemValue) => await onLanguageValueChanged(itemValue)}
+                    >
+                    { generatePickerItems() }
+                </Picker>
+            </Card>
         </View>
+    </ScrollView>
     );
 };
 
@@ -70,6 +95,10 @@ const styles = StyleSheet.create({
     },
     text:{
         textAlign: "center",
+    },
+    container:{
+        paddingBottom: 20,
+        marginBottom: 10,
     },
 });
 
