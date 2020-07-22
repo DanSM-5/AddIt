@@ -6,27 +6,41 @@ import { getLanguageOption, setLanguageOption} from '../js/languageOptions';
 import { Card, CheckBox } from 'react-native-elements';
 import LanguageContext from '../components/LanguageContext';
 import LoadingMessage from '../components/LoadingMessage';
+import useStored from '../js/useStored';
 
 const SettingsPage = () => {
-    const [timer, setTimer] = useState('');
-    const [language, setLanguage] = useState('');
+
     const sysConfig = useContext(LanguageContext);
     const lang = sysConfig.language;
+    const [ timerOption, loadingTimer ] = useStored(getTimerOption, lang.timerOptions.Circular);
+    const [ languageOption, loadingLanguage ] = useStored(getLanguageOption, lang.languages.English);
+    const [ timer, setTimer] = useState('');
+    const [ language, setLanguage] = useState('');
 
     useEffect(() => {
-        const setInitial = async () => {
-            const timerOption = await getTimerOption();
-            if (timerOption !== timer) {
-                setTimer(timerOption);
-            }
+        setTimer(timerOption);
+        setLanguage(languageOption);
+        console.log('rendering');
+    }, [timerOption, languageOption]);
+
+    console.log("You get////////////");
+    console.log(timerOption);
+    console.log(languageOption);
+
+    // useEffect(() => {
+    //     const setInitial = async () => {
+    //         const timerOption = await getTimerOption();
+    //         if (timerOption !== timer) {
+    //             setTimer(timerOption);
+    //         }
             
-            const languageOption = await getLanguageOption();
-            if (language !== languageOption) {
-                setLanguage(languageOption);
-            }
-        };
-        setInitial();
-    }, []);
+    //         const languageOption = await getLanguageOption();
+    //         if (language !== languageOption) {
+    //             setLanguage(languageOption);
+    //         }
+    //     };
+    //     setInitial();
+    // }, []);
     
     const onPressTimerOption = async (type) => {
         setTimer(type);
@@ -57,33 +71,35 @@ const SettingsPage = () => {
             .reduce((acc, curr) => curr === language ? [curr, ...acc] : [...acc, curr],[])
             .map((l, index) => (<Picker.Item label={lang.languages[l]} value={l} key={index}/>));
     
-    if (language === '') {
-        return (<LoadingMessage message={lang.loading}/>
-    )}
+    // if (language === '') {
+    //     return (<LoadingMessage message={lang.loading}/>
+    // )}
     
     return (
     <ScrollView style={styles.container}>
         <View style={styles.center}>
-            <Card
-                title="Display Timer"
-                >
-                <Text style={styles.text}>
-                    {lang.timerDescription }
-                </Text>
-                <View>
-                    {generateTimerOptions()}
-                </View>
+            <Card title="Display Timer" >
+                { loadingTimer
+                    ? <LoadingMessage message={lang.loading} />
+                    :<><Text style={styles.text}>
+                        {lang.timerDescription }
+                    </Text>
+                    <View>
+                        {generateTimerOptions()}
+                    </View></>
+                }
             </Card>
-            <Card
-                title={lang.language}
-                >
-                <Text>{lang.languageDescription}</Text>
-                <Picker
-                    selectedValue={language}
-                    onValueChange={async (itemValue) => await onLanguageValueChanged(itemValue)}
-                    >
-                    { generatePickerItems() }
-                </Picker>
+            <Card title={lang.language}>
+                { loadingLanguage
+                    ? <LoadingMessage message={lang.loading} />
+                    : <><Text>{lang.languageDescription}</Text>
+                        <Picker
+                            selectedValue={language}
+                            onValueChange={async (itemValue) => await onLanguageValueChanged(itemValue)}
+                        >
+                        { generatePickerItems() }
+                    </Picker></>
+                }
             </Card>
         </View>
     </ScrollView>

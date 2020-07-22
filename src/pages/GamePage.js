@@ -7,7 +7,6 @@ import NumbersCalculator from '../components/NumbersCalculator';
 import { getTimerOption } from '../js/timerOptions';
 
 const GamePage = ({ navigation, route }) => {
-    console.log(route.params.settings);
     const settings = route.params.difficulty !== 'CUSTOM' ? DifficultySettings[route.params.difficulty] : route.params.settings;
     const [gameInfo, setGameInfo] = useState({ score: 0, game: 1 });
     const resetGame = () => setGameInfo({ ...gameInfo, game: gameInfo.game + 1 });

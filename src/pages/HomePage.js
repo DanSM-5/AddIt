@@ -1,13 +1,16 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, TouchableHighlight } from 'react-native';
 import { isPortrait } from '../js/screenOrientation';
 import LanguageContext from '../components/LanguageContext';
+import isEqual from 'lodash.isequal';
 import {
     Menu,
     MenuOptions,
     MenuTrigger,
+    renderers,
   } from 'react-native-popup-menu'
 import InputMenuOption from '../components/InputMenuOption';
+import { setPrevious } from '../js/prevCustomConfig';
 
 const HomePage = ({ navigation }) => {
     const [ portraitOrientation, setPortraitOrientation ] = useState(true);
@@ -23,9 +26,12 @@ const HomePage = ({ navigation }) => {
         }
     }
 
-    const onContinue = (settings) => {
+    const onContinue = async(settings, prev) => {
         setOpen(false);
-        navigation.navigate('Game', {difficulty: 'CUSTOM', settings});
+        if (!isEqual(settings, prev)) {
+            await setPrevious(settings);
+        }
+        navigation.navigate('Game', {difficulty: 'CUSTOM', settings: {...settings, minToSelect: 2 }});
     }
 
     const onCancel = () => {
@@ -49,7 +55,9 @@ const HomePage = ({ navigation }) => {
                 key={index}
                 opened={open}
                 onBackdropPress={() => setOpen(false)}
+                renderer={renderers.Popover}
             >
+                {isPortrait() ? <MenuTrigger /> : null}
                 <TouchableOpacity
                     style={[styles.button, portraitOrientation 
                         ? dynamicStyles.btnPortrait 
@@ -60,9 +68,17 @@ const HomePage = ({ navigation }) => {
                         {difficulties[dif]}
                     </Text>
                 </TouchableOpacity>
-                <MenuTrigger />
-                <MenuOptions>                       
-                    <InputMenuOption lang={lang} onCancel={onCancel} onContinue={onContinue}/>
+                {isPortrait() ? null : <MenuTrigger />}
+                <MenuOptions
+                    customStyles={{
+                        optionsContainer: styles.popupMenu
+                    }}
+                >                       
+                    <InputMenuOption 
+                        lang={lang} 
+                        onCancel={onCancel} 
+                        onContinue={onContinue}
+                    />
                 </MenuOptions>
             </Menu>);
 
@@ -117,6 +133,12 @@ const styles = StyleSheet.create({
         flexGrow:1,
         marginTop: 15,
     },
+    popupMenu:{
+        borderRadius: 30,
+        height: 300,
+        width: 250,
+        padding: 15,
+    }
 });
 
 export default HomePage;

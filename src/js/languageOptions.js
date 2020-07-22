@@ -4,8 +4,9 @@ const KEY = 'languageOptions';
 
 export const getLanguageOption = async () => {
     try {
-        const value = await AsyncStorage.getItem(KEY);
-        return value === null ? 'English' : value;
+        //const value = 
+        return await AsyncStorage.getItem(KEY);
+        //return value === null ? 'English' : value;
     } catch (error) {
         console.log(error);
     }

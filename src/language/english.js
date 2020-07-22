@@ -1,8 +1,6 @@
 export default {
     playAgain: 'Play Again!',
     timerDescription: "Set the type of timer to be displayed in game.",
-    circularOption: "Circular",
-    numericOption: "Numeric",
     timerOptions:{
         Circular: "Circular",
         Numeric: "Numeric",
@@ -32,9 +30,12 @@ export default {
     answer: 'Answer',
     a: 'A',
     languageDescription: 'Select your language.',
-    customTimeDesc: 'Time (secons)',
-    customLenghtDesc: 'Select number of buttons',
-    customMaxAnstDesc: 'Maximum amount of numbers for answer',
-    customMinValueDesc: 'Minimum value of inside buttons',
-    customMaxValueDesc: 'Maximum value of inside buttons',
+    customTimeDesc: 'Time (seconds):',
+    customLenghtDesc: 'Number of buttons:',
+    customMaxAnstDesc: 'Maximum answer size:',
+    customMinValueDesc: 'Minimum value inside buttons:',
+    customMaxValueDesc: 'Maximum value inside buttons:',
+    ok:'Ok',
+    cancel:'Cancel',
+    loading: 'Loading...',
 }

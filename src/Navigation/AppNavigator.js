@@ -5,16 +5,22 @@ import { getLanguageOption } from '../js/languageOptions';
 import language from '../language/language';
 import { LanguageProvider } from '../components/LanguageContext';
 
+const defLanguage = 'English';
+
 const AppNavigator = () => {
-    const [ systemLanguage, setSystemLanguage ] = useState({language: language['English']});
+    const [ systemConfig, setSystemConfig ] = useState({language: language[defLanguage]});
     const [ loading, setLoading ] = useState(true);
 
     const load = async () => {
-        const lang = await getLanguageOption();
-        setSystemLanguage({ 
+        let lang = await getLanguageOption();
+        if (!lang) {
+            lang = defLanguage;
+        }
+
+        setSystemConfig({ 
             language: language[lang], 
             setLanguage: (lang) => 
-                setSystemLanguage((prevState) => 
+                setSystemConfig((prevState) => 
                     ({ ...prevState, language: language[lang] })),
         });
         setTimeout(() => setLoading(false), 200);
@@ -25,7 +31,7 @@ const AppNavigator = () => {
     }, [loading]);
 
     return (<NavigationContainer>
-        <LanguageProvider value={systemLanguage}>
+        <LanguageProvider value={systemConfig}>
             <MenuNavigation />
         </LanguageProvider>
     </NavigationContainer>

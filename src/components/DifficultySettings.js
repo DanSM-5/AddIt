@@ -23,4 +23,11 @@ export default {
         minDigit: 3,
         maxDigit: 15,
     },
+    DEFAULT: {
+        time: 10, 
+        length: 6,
+        maxToSelect: 3,
+        minDigit: 1,
+        maxDigit: 10,
+    }
 };

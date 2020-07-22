@@ -7,25 +7,18 @@ const NumericTimer = ({ timeLimit, onTimeEnd }) => {
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            setTimer((prevState) => {   
-                const updatedTime = prevState - 1;
-                if (updatedTime === 0){
-                    clearInterval(intervalId);
-                    onTimeEnd();
-                }
-                if (updatedTime < 0) {
-                    return prevState
-                }
-                return updatedTime;
-            });
+            setTimer((prevState) => prevState - 1);
         }, 1000);
+        if(timer === 0) timeEnd();
+
         return () => clearInterval(intervalId);
-    }, []);
+    }, [timer]);
+
+    const timeEnd = () => onTimeEnd();
 
     const calcTimerStyle = () => {
         const calcTimeWord = () => {
             const progress = timer / (timeLimit / 1000);
-            console.log(progress);
             if (progress >= 0.5) {
                 return 'Full';
             }else if (progress >= 0.2){
