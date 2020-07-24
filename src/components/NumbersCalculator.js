@@ -17,21 +17,24 @@ const NumbersCalculator = ({ length, minToSelect, maxToSelect, minDigit, maxDigi
 
 
 export const randomNumbers = ( length, min, max ) => Array.from({ length: length })
-                                .map(() => min + Math.floor((max - min + 1) * Math.random()));
+                                .map(() => getRandomBetween(min, max));// min + Math.floor((max - min + 1) * Math.random()));
 
-export const selectRandom = ( source, min, max ) => Array
+export const selectRandom = ( source, min, max ) => {
+    const indexes = new Map();
+    return Array
         .from({ length: getRandomBetween(min, max)})
-        .reduce((acc, curr) => {
-            const index = getRandomUnrepeatedIndex(acc.map(n => n.index), source.length)
-            return [...acc, {value: source[index], index: index}];
-        },[])
-        .map(curr => curr.value);
+        .map(_ => {
+            const index = getRandomUnrepeatedIndex(indexes, source.length);
+            indexes.set(index.toString(), index);
+            return source[index];
+    });
+};
 
-const getRandomUnrepeatedIndex = ( arr, max ) => {
+const getRandomUnrepeatedIndex = ( map, max ) => {
     while(true) {
         const indexVal = Math.floor(Math.random() * max);
-        if (!arr.some(num => num === indexVal)) {
-            return indexVal
+        if(map.has(indexVal.toString()) === false){
+            return indexVal;
         }
     }
 }
