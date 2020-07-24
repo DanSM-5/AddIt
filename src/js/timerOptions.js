@@ -5,9 +5,8 @@ const KEY = 'timerOptions';
 
 export const getTimerOption = async () => {
     try {
-        //const value = 
-        return await AsyncStorage.getItem(KEY);
-        //return value;// === null ? 'Circular' : value;
+        const value = await AsyncStorage.getItem(KEY);
+        return value === null ? 'Circular' : value;
     } catch (error) {
         console.log(error);
     }

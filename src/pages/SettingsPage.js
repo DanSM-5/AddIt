@@ -21,7 +21,7 @@ const SettingsPage = () => {
             }
             
             const languageOption = await getLanguageOption();
-            if (language !== languageOption) {
+            if (languageOption !== language) {
                 setLanguage(languageOption);
             }
         };
