@@ -78,8 +78,8 @@ android {
         applicationId "com.addit"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 6 // Target API upgrade
+        versionName "1.2.3"
     }
     signingConfigs {
         debug {
