@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.addit"
+    namespace "com.eduardosanchez.addit"
     defaultConfig {
-        applicationId "com.addit"
+        applicationId "com.eduardosanchez.addit"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 6 // Target API upgrade

@@ -1,4 +1,4 @@
-package com.addit;
+package com.eduardosanchez.addit;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
