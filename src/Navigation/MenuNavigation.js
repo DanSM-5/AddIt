@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Image } from 'react-native';
-import { 
-    createDrawerNavigator, 
+import {
+    createDrawerNavigator,
     DrawerContentScrollView,
-    DrawerItem, 
+    DrawerItem,
 } from '@react-navigation/drawer';
 import GameNavigation from './GameNavigation';
 import LanguageContext from '../components/LanguageContext';
@@ -12,13 +12,13 @@ const DrawerContent = ({ navigation }) => {
     const lang = useContext(LanguageContext).language;
     return (
     <DrawerContentScrollView>
-        <DrawerItem 
+        <DrawerItem
             label=""
-            icon={() => <Image style={{width: 20, height: 20}} 
+            icon={() => <Image style={{width: 20, height: 20}}
             source={require('../images/menu.webp')} />}
             onPress={() => navigation.toggleDrawer()}
         />
-        <DrawerItem 
+        <DrawerItem
             label={lang.settings}
             onPress={() => navigation.navigate('Home', { screen: 'Settings'})}
         />
@@ -36,10 +36,10 @@ const MenuNavigation = () => {
             gestureEnabled: false,
         }}
     >
-        <Menu.Screen 
-            name="Home" 
+        <Menu.Screen
+            name="Home"
             component={GameNavigation}
-            options={{ title: 'Home' }} 
+            options={{ title: 'Home' }}
         />
     </Menu.Navigator>);
 };

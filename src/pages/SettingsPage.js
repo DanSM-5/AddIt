@@ -19,7 +19,7 @@ const SettingsPage = () => {
             if (timerOption !== timer) {
                 setTimer(timerOption);
             }
-            
+
             const languageOption = await getLanguageOption();
             if (languageOption !== language) {
                 setLanguage(languageOption);
@@ -27,7 +27,7 @@ const SettingsPage = () => {
         };
         setInitial();
     }, []);
-    
+
     const onPressTimerOption = async (type) => {
         setTimer(type);
         await setTimerOption(type);
@@ -41,26 +41,26 @@ const SettingsPage = () => {
     const generateTimerOptions = () => Object.keys(lang.timerOptions)
         .map((o, index) => (
             <View key={index} >
-                <CheckBox 
+                <CheckBox
                     checked={timer === o}
                     center
                     title={lang.timerOptions[o]}
-                    checkedIcon='dot-circle-o'
-                    uncheckedIcon='circle-o'
+                    // checkedIcon='check-square-o'
+                    // uncheckedIcon='radio'
                     onPress={async () => await onPressTimerOption(o)}
                 />
             </View>
         ));
 
-    const generatePickerItems = 
+    const generatePickerItems =
         () => Object.keys(lang.languages)
             .reduce((acc, curr) => curr === language ? [curr, ...acc] : [...acc, curr],[])
             .map((l, index) => (<Picker.Item label={lang.languages[l]} value={l} key={index}/>));
-    
+
     if (language === '') {
         return (<LoadingMessage message={lang.loading}/>
     )}
-    
+
     return (
     <ScrollView style={styles.container}>
         <View style={styles.center}>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     },
     loadingView:{
         flex:1,
-        justifyContent: "center", 
+        justifyContent: "center",
         alignItems: "center",
     },
     loadingText:{

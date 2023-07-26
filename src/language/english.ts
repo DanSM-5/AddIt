@@ -1,4 +1,6 @@
-export default {
+import { LanguageContent } from "./types";
+
+export const englishContent: LanguageContent = {
     playAgain: 'Play Again!',
     timerDescription: "Set the type of timer to be displayed in game.",
     timerOptions:{
@@ -38,4 +40,6 @@ export default {
     ok:'Ok',
     cancel:'Cancel',
     loading: 'Loading...',
-}
+};
+
+export default englishContent;

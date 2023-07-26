@@ -2,7 +2,7 @@ import React from 'react';
 import DifficultySettings from './DifficultySettings';
 import { getPrevious } from '../js/prevCustomConfig';
 import InputMenuOptionContent from './InputMenuOptionContent';
-import useStored from '../js/useStored';
+import useStored from '../hooks/useStored';
 
 const InputMenuOption = ({ onContinue, onCancel, lang }) => {
     const [ previous, loading ] = useStored(getPrevious, DifficultySettings['DEFAULT']);

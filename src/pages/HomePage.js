@@ -43,15 +43,15 @@ const HomePage = ({ navigation }) => {
             ? <TouchableOpacity
                 key={index}
                 onPress={() => navigation.navigate('Game', {difficulty: dif})}
-                style={[styles.button, portraitOrientation 
-                    ? dynamicStyles.btnPortrait 
+                style={[styles.button, portraitOrientation
+                    ? dynamicStyles.btnPortrait
                     : dynamicStyles.btnLandscape]}
             >
                 <Text style={styles.text}>
                     {difficulties[dif]}
                 </Text>
             </TouchableOpacity>
-            : <Menu 
+            : <Menu
                 key={index}
                 opened={open}
                 onBackdropPress={() => setOpen(false)}
@@ -59,8 +59,8 @@ const HomePage = ({ navigation }) => {
             >
                 {isPortrait() ? <MenuTrigger /> : null}
                 <TouchableOpacity
-                    style={[styles.button, portraitOrientation 
-                        ? dynamicStyles.btnPortrait 
+                    style={[styles.button, portraitOrientation
+                        ? dynamicStyles.btnPortrait
                         : dynamicStyles.btnLandscape]}
                     onPress={() => setOpen(true)}
                 >
@@ -73,10 +73,10 @@ const HomePage = ({ navigation }) => {
                     customStyles={{
                         optionsContainer: styles.popupMenu
                     }}
-                >                       
-                    <InputMenuOption 
-                        lang={lang} 
-                        onCancel={onCancel} 
+                >
+                    <InputMenuOption
+                        lang={lang}
+                        onCancel={onCancel}
                         onContinue={onContinue}
                     />
                 </MenuOptions>

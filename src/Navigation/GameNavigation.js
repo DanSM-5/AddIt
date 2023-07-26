@@ -12,24 +12,24 @@ const GameNavigation = ({ navigation }) => {
     const lang = useContext(LanguageContext).language;
     return (
     <Game.Navigator>
-        <Game.Screen 
-            name="Home" 
-            component={HomePage} 
-            options={{ 
+        <Game.Screen
+            name="Home"
+            component={HomePage}
+            options={{
                 title: lang.chooseDif,
                 headerRight: () => <MenuButton onPress={navigation.toggleDrawer} />,
             }}
         />
-        <Game.Screen 
-            name="Game" 
-            component={GamePage} 
-            options={{ title: lang.game }} 
+        <Game.Screen
+            name="Game"
+            component={GamePage}
+            options={{ title: lang.game }}
         />
-        <Game.Screen 
-            name="Settings" 
+        <Game.Screen
+            name="Settings"
             component={SettingsPage}
-            options={{ title: lang.settings }} 
-        />   
+            options={{ title: lang.settings }}
+        />
     </Game.Navigator>);
 }
 export default GameNavigation;

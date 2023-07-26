@@ -1,4 +1,6 @@
-export default {
+import { LanguageContent } from './types';
+
+export const spanishContent: LanguageContent = {
     playAgain: 'Juega Otro!',
     timerDescription: "Selecciona el tipo de temporizador que se mostrará en el juego.",
     timerOptions:{
@@ -38,4 +40,6 @@ export default {
     ok:'Ok',
     cancel:'Atrás',
     loading: 'Cargando...',
-}
+};
+
+export default spanishContent;
