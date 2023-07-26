@@ -13,7 +13,7 @@ const GameNavigation = ({ navigation }) => {
     return (
     <Game.Navigator>
         <Game.Screen
-            name="Home"
+            name="Menu"
             component={HomePage}
             options={{
                 title: lang.chooseDif,
