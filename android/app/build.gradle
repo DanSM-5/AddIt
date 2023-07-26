@@ -90,8 +90,8 @@ android {
         applicationId "com.eduardosanchez.addit"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6 // Target API upgrade
-        versionName "1.2.3"
+        versionCode 7 // Fix crashes and icons
+        versionName "1.2.4"
     }
     signingConfigs {
         debug {
