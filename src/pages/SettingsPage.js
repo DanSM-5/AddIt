@@ -45,8 +45,8 @@ const SettingsPage = () => {
                     checked={timer === o}
                     center
                     title={lang.timerOptions[o]}
-                    // checkedIcon='check-square-o'
-                    // uncheckedIcon='radio'
+                    checkedIcon='dot-circle-o'
+                    uncheckedIcon='circle-o'
                     onPress={async () => await onPressTimerOption(o)}
                 />
             </View>
