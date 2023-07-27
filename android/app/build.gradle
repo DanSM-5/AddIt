@@ -90,8 +90,8 @@ android {
         applicationId "com.eduardosanchez.addit"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7 // Fix crashes and icons
-        versionName "1.2.4"
+        versionCode 8 // Fix duplicated vector icons
+        versionName "1.2.5"
     }
     signingConfigs {
         debug {
