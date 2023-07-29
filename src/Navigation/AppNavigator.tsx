@@ -5,13 +5,8 @@ import { getLanguageOption } from '../js/languageOptions';
 import language from '../language/language';
 import { LanguageProvider } from '../components/LanguageContext';
 import { useLatest } from '../hooks/useLatest';
-import { LanguageContent, SuppotedLanguage, defaultLanguage } from '../language';
-
-type SystemConfig = {
-    language: LanguageContent;
-    current: SuppotedLanguage;
-    setLanguage: (selected: SuppotedLanguage) => void;
-};
+import { SuppotedLanguage, defaultLanguage } from '../language';
+import { SystemConfig } from '../components/LanguageContext';
 
 const AppNavigator = () => {
     const [ systemConfig, setSystemConfig ] = useState<SystemConfig>({
