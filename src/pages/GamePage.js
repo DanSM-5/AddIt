@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 import DifficultySettings from '../components/DifficultySettings';
 import GameComponent from '../components/GameComponent';
-import NumbersCalculator from '../components/NumbersCalculator';
+import numbersSetGenerator from '../js/numbersSetGenerator';
 import { getTimerOption } from '../js/timerOptions';
 
 const GamePage = ({ navigation, route }) => {
@@ -11,7 +11,7 @@ const GamePage = ({ navigation, route }) => {
     const [gameInfo, setGameInfo] = useState({ score: 0, game: 1 });
     const resetGame = () => setGameInfo({ ...gameInfo, game: gameInfo.game + 1 });
     const victoryAndReset = () => setGameInfo({game: gameInfo.game + 1, score: gameInfo.score + 1});
-    const numbers = NumbersCalculator(settings);
+    const numbers = numbersSetGenerator(settings);
     const [timerOption, setTimerOption] = useState(''); 
 
     useEffect(() => {
