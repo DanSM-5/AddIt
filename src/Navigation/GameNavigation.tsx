@@ -7,29 +7,32 @@ import MenuButton from '../components/MenuButton';
 import LanguageContext from '../components/LanguageContext';
 
 const Game = createStackNavigator();
-
-const GameNavigation = ({ navigation }) => {
-    const lang = useContext(LanguageContext).language;
+const GameNavigation = ({ navigation }: {
+    route: Record<string, unknown>;
+    navigation: any;
+}) => {
+    const { game, settings, chooseDif } = useContext(LanguageContext).language;
     return (
     <Game.Navigator>
         <Game.Screen
             name="Menu"
             component={HomePage}
             options={{
-                title: lang.chooseDif,
-                headerRight: () => <MenuButton onPress={navigation.toggleDrawer} />,
+                title: chooseDif,
+                headerRight: () => <MenuButton navigation onPress={navigation.toggleDrawer} />,
             }}
         />
         <Game.Screen
             name="Game"
             component={GamePage}
-            options={{ title: lang.game }}
+            options={{ title: game }}
         />
         <Game.Screen
             name="Settings"
             component={SettingsPage}
-            options={{ title: lang.settings }}
+            options={{ title: settings }}
         />
     </Game.Navigator>);
-}
+};
+
 export default GameNavigation;
