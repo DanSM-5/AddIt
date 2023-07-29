@@ -5,7 +5,7 @@ import RandomNumber from './RandomNumber';
 import { PLAYING, LOST, WON } from './GameStatus';
 import AnimatedProgressWheel from './AnimatedProgressWheel';
 import DifficultySettings from './DifficultySettings';
-import NumbersCalculator from './NumbersCalculator';
+import numbersSetGenerator from '../js/numbersSetGenerator';
 
 /**
  * OLD VERSION OF THE GAME
@@ -39,7 +39,7 @@ class Game extends React.Component {
         this.score = this.props.gameInfo.score;
         this.difficultySettings = DifficultySettings(this.props.difficulty);
         this.time = this.difficultySettings.time;
-        [this.target, this.randomNumbers, this.randomSelection] =  NumbersCalculator(this.difficultySettings);
+        [this.target, this.randomNumbers, this.randomSelection] =  numbersSetGenerator(this.difficultySettings);
     }
 
     componentDidMount(){
