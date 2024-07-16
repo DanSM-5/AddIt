@@ -22,7 +22,7 @@ To build for Android you need the following:
 - Node 18.6.0
 - Java 11 (open-jdk/microsoft open-jdk/oracle-jdk)
 - Android command-line tools or Android Studio.
-- Android Build tools (Target API 33)
+- Android Build tools (Target API 34)
 
 ## How to build (Android)
 
@@ -30,7 +30,7 @@ To build for Android you need the following:
 ```bash
 git clone https://github.com/DanSM-5/AddIt
 ```
-2. Run `npm ci` to install the dependencies.
+2. Run `npm ci --legacy-peer-deps` to install the dependencies. The `--legacy-peer-deps` is needed for conflicts with `react-native-vector-icons` but should not affect build (TODO: Fix dependency issue).
 3. Run:
 
 ```bash
