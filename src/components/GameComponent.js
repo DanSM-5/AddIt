@@ -21,6 +21,7 @@ const GameComponent = ({
   gameProgress,
   difficulty,
   onPlayAgain,
+  onOrientationChanged,
   numbersSettings,
   onVictory,
   timerOption,
@@ -72,12 +73,10 @@ const GameComponent = ({
 
   const resetGame = () => (game.status === WON ? onVictory() : onPlayAgain());
 
-  const onOrientationChanged = () => {
-    if (isPortrait()) {
-      setIsPortraitOrientation(true);
-    } else {
-      setIsPortraitOrientation(false);
-    }
+  const orientationChangedHandler = () => {
+    const portrait = isPortrait();
+    setIsPortraitOrientation(portrait);
+    onOrientationChanged(portrait);
   };
 
   const { width } = Dimensions.get('window');
@@ -85,9 +84,10 @@ const GameComponent = ({
   const dynamicStyles = StyleSheet.create({
     btnPortrait: {
       width: Math.round(width) * 0.8,
+      height: 60,
     },
     btnLandscape: {
-      height: 85,
+      height: 95,
       width: Math.round(width) * 0.15,
     },
   });
@@ -117,7 +117,7 @@ const GameComponent = ({
         styles.gameContainer,
         !isPortraitOrientation && styles.landscapeLayout,
       ]}
-      onLayout={onOrientationChanged}>
+      onLayout={orientationChangedHandler}>
       <GameHeader
         difficulty={difficulty}
         status={game.status}

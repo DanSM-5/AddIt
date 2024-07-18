@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import DifficultySettings from '../components/DifficultySettings';
@@ -11,6 +11,8 @@ import { GameSettings } from '../types/GameSettings';
 const { CUSTOM } = DIFFICULTIES;
 
 interface GamePageProps {
+  mainNavigation: { setOptions: (args: unknown) => void };
+  navigation: { setOptions: (args: unknown) => void };
   route: {
     key: string;
     name: 'Game';
@@ -26,7 +28,7 @@ interface GamePageProps {
   };
 }
 
-const GamePage = ({ route }: GamePageProps) => {
+const GamePage = ({ route, navigation, mainNavigation }: GamePageProps) => {
   const settings =
     route.params.difficulty !== CUSTOM
       ? DifficultySettings[route.params.difficulty]
@@ -38,6 +40,22 @@ const GamePage = ({ route }: GamePageProps) => {
     setGameInfo({ game: gameInfo.game + 1, score: gameInfo.score + 1 });
   const numbers = numbersSetGenerator(settings);
   const [timerOption] = useStored(getTimerOption, TIMER_TYPES.CIRCULAR);
+  const onOrientationChanged = useCallback(
+    (isPortrait: boolean) => {
+      navigation.setOptions({ headerShown: isPortrait });
+      mainNavigation.setOptions({ headerShown: isPortrait });
+    },
+    [navigation, mainNavigation],
+  );
+
+  useEffect(() => {
+    return () => {
+      // Always show navigations on exit
+      navigation.setOptions({ headerShown: true });
+      mainNavigation.setOptions({ headerShown: true });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -51,6 +69,7 @@ const GamePage = ({ route }: GamePageProps) => {
           numbersSettings={numbers}
           difficulty={route.params.difficulty}
           timerOption={timerOption}
+          onOrientationChanged={onOrientationChanged}
         />
       </View>
     </>

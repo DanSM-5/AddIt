@@ -19,6 +19,12 @@ const GameNavigation = ({
     return () => <MenuButton navigation onPress={navigation.toggleDrawer} />;
   }, [navigation]);
 
+  const GamePageComponent = useMemo(() => {
+    return (props: any) => {
+      return <GamePage {...props} mainNavigation={navigation as any} />;
+    };
+  }, [navigation]);
+
   return (
     <Game.Navigator>
       <Game.Screen
@@ -31,7 +37,7 @@ const GameNavigation = ({
       />
       <Game.Screen
         name="Game"
-        component={GamePage as (param: unknown) => JSX.Element}
+        component={GamePageComponent as () => JSX.Element}
         options={{ title: game }}
       />
       <Game.Screen

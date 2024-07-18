@@ -17,10 +17,11 @@ import useStored from '../hooks/useStored';
  * @param {Object} params Params for component
  * @param {LanguageContent} params.lang Language to use to display UI
  * @param {() => void} params.onCancel Function to call when cancel button is pressed
+ * @param {boolean} params.portrait Flag to know if orientation is portrait
  * @param {(newSettings: GameSettings, initalSettings: GameSettings) => void} params.onContinue Function to call when OK button is pressed
  * @returns {JSX.Element}
  */
-const InputMenuOption = ({ onContinue, onCancel, lang }) => {
+const InputMenuOption = ({ onContinue, onCancel, lang, portrait }) => {
   const [previous, loading] = useStored(
     getGameSettings,
     DifficultySettings.DEFAULT,
@@ -33,6 +34,7 @@ const InputMenuOption = ({ onContinue, onCancel, lang }) => {
   return (
     <InputMenuOptionContent
       initial={previous}
+      portrait={portrait}
       lang={lang}
       onContinue={onContinue}
       onCancel={onCancel}

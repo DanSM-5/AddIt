@@ -63,7 +63,7 @@ const HomePage = ({ navigation }: { navigation: DrawerNavigationHelpers }) => {
         width: Math.round(width) * 0.8,
       },
       btnLandscape: {
-        height: Math.round(height) * 0.2,
+        height: Math.round(height) * 0.3,
         width: Math.round(width) * 0.6,
       },
     });
@@ -102,10 +102,13 @@ const HomePage = ({ navigation }: { navigation: DrawerNavigationHelpers }) => {
             {isPortrait() ? null : <MenuTrigger />}
             <MenuOptions
               customStyles={{
-                optionsContainer: styles.popupMenu,
+                optionsContainer: portraitOrientation
+                  ? styles.popupMenuPortrait
+                  : styles.popupMenuLandscape,
               }}>
               <InputMenuOption
                 lang={lang}
+                portrait={portraitOrientation}
                 onCancel={onCancel}
                 onContinue={onContinue}
               />
@@ -155,9 +158,15 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginTop: 15,
   },
-  popupMenu: {
+  popupMenuPortrait: {
     borderRadius: 30,
-    height: 300,
+    height: 500,
+    width: 250,
+    padding: 15,
+  },
+  popupMenuLandscape: {
+    borderRadius: 30,
+    height: 350,
     width: 250,
     padding: 15,
   },
