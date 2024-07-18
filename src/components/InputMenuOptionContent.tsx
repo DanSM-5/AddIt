@@ -62,7 +62,12 @@ const InputMenuOptionContent = ({
           <NumericInput
             type="plus-minus"
             value={length}
-            onChange={value => setLength(value)}
+            onChange={value => {
+              if (value < maxToSelect) {
+                setMaxToSelect(value);
+              }
+              setLength(value);
+            }}
             minValue={3}
             maxValue={9}
             iconStyle={styles.iconStyle}
@@ -74,7 +79,9 @@ const InputMenuOptionContent = ({
           <NumericInput
             type="plus-minus"
             value={maxToSelect}
-            onChange={value => setMaxToSelect(value)}
+            onChange={value => {
+              setMaxToSelect(value);
+            }}
             minValue={2}
             maxValue={length}
             iconStyle={styles.iconStyle}
