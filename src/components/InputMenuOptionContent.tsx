@@ -1,3 +1,4 @@
+// @ts-check
 import React, { useState } from 'react';
 import {
   ScrollView,
@@ -6,15 +7,17 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import NumericInput from 'react-native-numeric-input';
+import { NumericInput } from './NumericInput';
+import { GameSettings } from '../types/GameSettings';
+import { DictionaryContent } from '../language';
 
-/**
- * @typedef {import('../types/GameSettings').GameSettings} GameSettings
- */
-
-/**
- * @typedef {import('../language/types').DictionaryContent} LanguageContent
- */
+interface ComponentProps {
+  initial: GameSettings;
+  dictionary: DictionaryContent;
+  onCancel: () => void;
+  onContinue: (curr: GameSettings, prev: GameSettings) => JSX.Element;
+  portrait: boolean;
+}
 
 /**
  * Component that renders the menu option content
@@ -28,11 +31,11 @@ import NumericInput from 'react-native-numeric-input';
  */
 const InputMenuOptionContent = ({
   initial,
-  lang,
+  dictionary,
   onCancel,
   onContinue,
   portrait,
-}) => {
+}: ComponentProps) => {
   const [time, setTime] = useState(initial.time);
   const [length, setLength] = useState(initial.length);
   const [maxToSelect, setMaxToSelect] = useState(initial.maxToSelect);
@@ -44,7 +47,7 @@ const InputMenuOptionContent = ({
       style={portrait ? styles.containerPortrait : styles.containerLandscape}>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{lang.customTimeDesc}</Text>
+          <Text style={styles.desc}>{dictionary.customTimeDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={time}
@@ -55,7 +58,7 @@ const InputMenuOptionContent = ({
           />
         </View>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{lang.customLenghtDesc}</Text>
+          <Text style={styles.desc}>{dictionary.customLenghtDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={length}
@@ -67,7 +70,7 @@ const InputMenuOptionContent = ({
           />
         </View>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{lang.customMaxAnstDesc}</Text>
+          <Text style={styles.desc}>{dictionary.customMaxAnstDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={maxToSelect}
@@ -79,7 +82,7 @@ const InputMenuOptionContent = ({
           />
         </View>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{lang.customMinValueDesc}</Text>
+          <Text style={styles.desc}>{dictionary.customMinValueDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={minDigit}
@@ -91,7 +94,7 @@ const InputMenuOptionContent = ({
           />
         </View>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{lang.customMaxValueDesc}</Text>
+          <Text style={styles.desc}>{dictionary.customMaxValueDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={maxDigit}
@@ -104,7 +107,7 @@ const InputMenuOptionContent = ({
       </ScrollView>
       <View style={styles.buttonsArea}>
         <TouchableOpacity style={styles.button} onPress={onCancel}>
-          <Text style={styles.text}>{lang.cancel}</Text>
+          <Text style={styles.text}>{dictionary.cancel}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -121,7 +124,7 @@ const InputMenuOptionContent = ({
               initial,
             )
           }>
-          <Text style={styles.text}>{lang.ok}</Text>
+          <Text style={styles.text}>{dictionary.ok}</Text>
         </TouchableOpacity>
       </View>
     </View>
