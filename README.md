@@ -22,7 +22,7 @@ To build for Android you need the following:
 - Node 18.6.0
 - Java 11 (open-jdk/microsoft open-jdk/oracle-jdk)
 - Android command-line tools or Android Studio.
-- Android Build tools (Target API 34)
+- Android Build tools (Target API 33 for expo and target API 34 for release)
 
 ## How to build (Android)
 
@@ -30,27 +30,32 @@ To build for Android you need the following:
 ```bash
 git clone https://github.com/DanSM-5/AddIt
 ```
-2. Run `npm ci --legacy-peer-deps` to install the dependencies. Flag is needed due to issue with `react-native-numeric-input`.
-3. Go to **node_modules/react-native-numeric-input/NumericInput/NumericInput.js** and change property `name` from Icon to `chevron-back-circle` and `chevron-forward-circle`.
-```tsx
-  <Icon name='chevron-back-circle' />
-  ...
-  <Icon name='chevron-forward-circle' />
-```
+2. Run `npm ci` to install the dependencies.
 
 ### Development
 
-Run the command
+1. Run the command
 
 ```bash
 npm start
 ```
 
-When expo launches, type `a` for building for Android.
+2. When expo launches, type `a` for building for Android.
 
 ### Production
 
-Build a release app using `gradlew`
+1. Create a `local.properties` file in `./android` with the following variables:
+
+```bash
+CERTIFICATE=<CERTIFICATE.keystore>
+KEY_ALIAS=<ALIAS>
+STORE_PASSWORD=<STORE_PASSWORD>
+KEY_PASSWORD=<KEY_PASSWORD>
+```
+
+2. Locate the `<CERTIFICATE.keystore>` under `./android` and `./android/app`.
+
+3. Build a release app using `gradlew`
 
 ```bash
 cd android
@@ -64,8 +69,6 @@ cd android
 gradle assembleRelease
 ```
 
-You can also try the npm command `npm run build:release:android`
-
 ## Setup Environment
 
 ### Windows
@@ -74,9 +77,17 @@ You can install the dependencies in windows using `scoop` package manager.
 Set environment variables dependencies as follows:
 
 ```bash
+# bash/zsh
 export ANDROID_HOME="$HOME/scoop/apps/android-sdk/current"
 export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME:/platform-tools:$PATH"
 export JAVA_HOME="$HOME/scoop/apps/openjdk11/current"
+```
+
+```powershell
+# powershell
+$env:ANDROID_HOME = "$HOME/scoop/apps/android-sdk/current"
+$env:PATH = "$env:ANDROID_HOME/tools:$env:ANDROID_HOME/tools/bin:$env:ANDROID_HOME:/platform-tools:$env:PATH"
+$env:JAVA_HOME = "$HOME/scoop/apps/openjdk11/current"
 ```
 
 ## Download the game
