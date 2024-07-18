@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import {
   View,
   Text,
@@ -92,7 +92,7 @@ const GameComponent = ({
     },
   });
 
-  const TimerElement = () => {
+  const timerElement = useMemo(() => {
     if (timerOption === 'Circular') {
       return (
         <AnimatedProgressWheel
@@ -109,7 +109,7 @@ const GameComponent = ({
     } else if (timerOption === 'Numeric') {
       return <NumericTimer timeLimit={timeLimit} onTimeEnd={onTimeEnd} />;
     }
-  };
+  }, [timeLimit, timerOption]);
 
   return (
     <View
@@ -141,7 +141,7 @@ const GameComponent = ({
       </View>
       <View style={styles.endGameArea}>
         {game.status === PLAYING ? (
-          TimerElement()
+          timerElement
         ) : (
           <TouchableOpacity
             onPress={resetGame}
