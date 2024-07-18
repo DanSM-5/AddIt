@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from './Button';
+// import PropTypes from 'prop-types';
 import { create, PREDEF_RES } from '../../utils/pixelPerfect';
 
 let calcSize = create(PREDEF_RES.iphone7.px);
@@ -43,10 +44,16 @@ interface NumericInputProps {
   decreaseIconNameOverride?: string;
 }
 
-export default class NumericInput extends Component {
+export default class NumericInput extends Component<
+  NumericInputProps,
+  {
+    value: number;
+    lastValid: number;
+    stringValue: string;
+    legal?: boolean;
+  }
+> {
   ref: TextInput | null = null;
-  declare props: NumericInputProps;
-  declare state: { value: number; lastValid: number; stringValue: string };
   public static defaultProps = {
     iconSize: calcSize(30),
     borderColor: '#d4d4d4',
@@ -73,8 +80,7 @@ export default class NumericInput extends Component {
     reachMaxDecIconStyle: {},
     reachMinIncIconStyle: {},
     reachMinDecIconStyle: {},
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onLimitReached: (isMax: any, msg: any) => {},
+    onLimitReached: () => {},
     extraTextInputProps: {},
   };
 
@@ -221,7 +227,7 @@ export default class NumericInput extends Component {
     }
     let legal = this.isLegalValue(value, this.realMatch, this.intMatch);
     if (legal) {
-      this.setState({ lastValid: value });
+      this.setState({ lastValid: Number(value) });
     }
     if (!legal && !this.props.validateOnBlur) {
       if (this.ref) {
@@ -601,6 +607,7 @@ const style = StyleSheet.create({
     paddingRight: calcSize(15),
   },
 });
+// // @ts-ignore
 // NumericInput.propTypes = {
 //   iconSize: PropTypes.number,
 //   borderColor: PropTypes.string,
@@ -631,6 +638,7 @@ const style = StyleSheet.create({
 //   reachMinDecIconStyle: PropTypes.any,
 //   extraTextInputProps: PropTypes.any,
 // };
+// // @ts-ignore
 // NumericInput.defaultProps = {
 //   iconSize: calcSize(30),
 //   borderColor: '#d4d4d4',
@@ -657,6 +665,6 @@ const style = StyleSheet.create({
 //   reachMaxDecIconStyle: {},
 //   reachMinIncIconStyle: {},
 //   reachMinDecIconStyle: {},
-//   onLimitReached: (isMax: any, msg: any) => {},
+//   onLimitReached: () => {},
 //   extraTextInputProps: {},
-// }
+// };
