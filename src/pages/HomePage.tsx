@@ -27,7 +27,7 @@ const HomePage = ({ navigation }: { navigation: DrawerNavigationHelpers }) => {
   const [portraitOrientation, setPortraitOrientation] = useState(true);
   const [open, setOpen] = useState(false);
   const { difficulties } = useContext(LanguageContext).dictionary;
-  const lang = useContext(LanguageContext).dictionary;
+  const dictionary = useContext(LanguageContext).dictionary;
 
   const onOrientationChanged = () => {
     setPortraitOrientation(isPortrait());
@@ -107,7 +107,7 @@ const HomePage = ({ navigation }: { navigation: DrawerNavigationHelpers }) => {
                   : styles.popupMenuLandscape,
               }}>
               <InputMenuOption
-                lang={lang}
+                dictionary={dictionary}
                 portrait={portraitOrientation}
                 onCancel={onCancel}
                 onContinue={onContinue}
@@ -116,7 +116,14 @@ const HomePage = ({ navigation }: { navigation: DrawerNavigationHelpers }) => {
           </Menu>
         ),
     );
-  }, [difficulties, lang, navigation, onContinue, open, portraitOrientation]);
+  }, [
+    difficulties,
+    dictionary,
+    navigation,
+    onContinue,
+    open,
+    portraitOrientation,
+  ]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollScreen}>

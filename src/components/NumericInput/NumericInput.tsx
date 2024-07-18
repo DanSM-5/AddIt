@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from './Button';
-// import PropTypes from 'prop-types';
 import { create, PREDEF_RES } from '../../utils/pixelPerfect';
 
 let calcSize = create(PREDEF_RES.iphone7.px);
@@ -607,64 +606,3 @@ const style = StyleSheet.create({
     paddingRight: calcSize(15),
   },
 });
-// // @ts-ignore
-// NumericInput.propTypes = {
-//   iconSize: PropTypes.number,
-//   borderColor: PropTypes.string,
-//   iconStyle: PropTypes.any,
-//   totalWidth: PropTypes.number,
-//   totalHeight: PropTypes.number,
-//   sepratorWidth: PropTypes.number,
-//   type: PropTypes.oneOf(['up-down', 'plus-minus']),
-//   valueType: PropTypes.oneOf(['real', 'integer']),
-//   rounded: PropTypes.any,
-//   textColor: PropTypes.string,
-//   containerStyle: PropTypes.any,
-//   inputStyle: PropTypes.any,
-//   initValue: PropTypes.number,
-//   onChange: PropTypes.func.isRequired,
-//   onLimitReached: PropTypes.func,
-//   value: PropTypes.number,
-//   minValue: PropTypes.number,
-//   maxValue: PropTypes.number,
-//   step: PropTypes.number,
-//   upDownButtonsBackgroundColor: PropTypes.string,
-//   rightButtonBackgroundColor: PropTypes.string,
-//   leftButtonBackgroundColor: PropTypes.string,
-//   editable: PropTypes.bool,
-//   reachMaxIncIconStyle: PropTypes.any,
-//   reachMaxDecIconStyle: PropTypes.any,
-//   reachMinIncIconStyle: PropTypes.any,
-//   reachMinDecIconStyle: PropTypes.any,
-//   extraTextInputProps: PropTypes.any,
-// };
-// // @ts-ignore
-// NumericInput.defaultProps = {
-//   iconSize: calcSize(30),
-//   borderColor: '#d4d4d4',
-//   iconStyle: {},
-//   totalWidth: calcSize(220),
-//   sepratorWidth: 1,
-//   type: 'plus-minus',
-//   rounded: false,
-//   textColor: 'black',
-//   containerStyle: {},
-//   inputStyle: {},
-//   initValue: null,
-//   valueType: 'integer',
-//   value: null,
-//   minValue: null,
-//   maxValue: null,
-//   step: 1,
-//   upDownButtonsBackgroundColor: 'white',
-//   rightButtonBackgroundColor: 'white',
-//   leftButtonBackgroundColor: 'white',
-//   editable: true,
-//   validateOnBlur: true,
-//   reachMaxIncIconStyle: {},
-//   reachMaxDecIconStyle: {},
-//   reachMinIncIconStyle: {},
-//   reachMinDecIconStyle: {},
-//   onLimitReached: () => {},
-//   extraTextInputProps: {},
-// };

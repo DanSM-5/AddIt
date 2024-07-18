@@ -15,7 +15,7 @@ interface ComponentProps {
   initial: GameSettings;
   dictionary: DictionaryContent;
   onCancel: () => void;
-  onContinue: (curr: GameSettings, prev: GameSettings) => JSX.Element;
+  onContinue: (curr: GameSettings, prev: GameSettings) => void;
   portrait: boolean;
 }
 

@@ -3,25 +3,29 @@ import DifficultySettings from './DifficultySettings';
 import { getGameSettings } from '../utils/prevCustomConfig';
 import InputMenuOptionContent from './InputMenuOptionContent';
 import useStored from '../hooks/useStored';
-
-/**
- * @typedef {import('../types/GameSettings').GameSettings} GameSettings
- */
-
-/**
- * @typedef {import('../language/types').DictionaryContent} LanguageContent
- */
+import { GameSettings } from '../types/GameSettings';
+import { DictionaryContent } from '../language';
 
 /**
  * Component that renders the menu option content
  * @param {Object} params Params for component
- * @param {LanguageContent} params.lang Language to use to display UI
+ * @param {LanguageContent} params.dictionary Language to use to display UI
  * @param {() => void} params.onCancel Function to call when cancel button is pressed
  * @param {boolean} params.portrait Flag to know if orientation is portrait
  * @param {(newSettings: GameSettings, initalSettings: GameSettings) => void} params.onContinue Function to call when OK button is pressed
  * @returns {JSX.Element}
  */
-const InputMenuOption = ({ onContinue, onCancel, lang, portrait }) => {
+const InputMenuOption = ({
+  onContinue,
+  onCancel,
+  dictionary,
+  portrait,
+}: {
+  onContinue: (curr: GameSettings, prev: GameSettings) => void;
+  portrait: boolean;
+  dictionary: DictionaryContent;
+  onCancel: () => void;
+}) => {
   const [previous, loading] = useStored(
     getGameSettings,
     DifficultySettings.DEFAULT,
@@ -35,7 +39,7 @@ const InputMenuOption = ({ onContinue, onCancel, lang, portrait }) => {
     <InputMenuOptionContent
       initial={previous}
       portrait={portrait}
-      lang={lang}
+      dictionary={dictionary}
       onContinue={onContinue}
       onCancel={onCancel}
     />
