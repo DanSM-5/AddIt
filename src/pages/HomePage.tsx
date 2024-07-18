@@ -8,7 +8,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-import { isPortrait } from '../js/screenOrientation';
+import { isPortrait } from '../utils/screenOrientation';
 import LanguageContext from '../components/LanguageContext';
 import {
   Menu,
@@ -17,7 +17,7 @@ import {
   renderers,
 } from 'react-native-popup-menu';
 import InputMenuOption from '../components/InputMenuOption';
-import { setGameSettings } from '../js/prevCustomConfig';
+import { setGameSettings } from '../utils/prevCustomConfig';
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types';
 import { GameSettings } from '../types/GameSettings';
 import { DIFFICULTIES } from '../language';

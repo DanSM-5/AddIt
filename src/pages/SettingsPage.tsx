@@ -7,8 +7,12 @@ import {
   useColorScheme,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { getTimerOption, setTimerOption, TimerType } from '../js/timerOptions';
-import { getLanguageOption, setLanguageOption } from '../js/languageOptions';
+import {
+  getTimerOption,
+  setTimerOption,
+  TimerType,
+} from '../utils/timerOptions';
+import { getLanguageOption, setLanguageOption } from '../utils/languageOptions';
 import { Card, CheckBox } from 'react-native-elements';
 import LanguageContext from '../components/LanguageContext';
 import LoadingMessage from '../components/LoadingMessage';

@@ -1,6 +1,6 @@
 import React from 'react';
 import DifficultySettings from './DifficultySettings';
-import { getGameSettings } from '../js/prevCustomConfig';
+import { getGameSettings } from '../utils/prevCustomConfig';
 import InputMenuOptionContent from './InputMenuOptionContent';
 import useStored from '../hooks/useStored';
 

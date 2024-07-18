@@ -5,7 +5,7 @@ import RandomNumber from './RandomNumber';
 import { PLAYING, LOST, WON } from './GameStatus';
 import AnimatedProgressWheel from './AnimatedProgressWheel';
 import DifficultySettings from './DifficultySettings';
-import numbersSetGenerator from '../js/numbersSetGenerator';
+import numbersSetGenerator from '../utils/numbersSetGenerator';
 
 /**
  * OLD VERSION OF THE GAME

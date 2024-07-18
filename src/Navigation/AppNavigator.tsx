@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import MenuNavigation from './MenuNavigation';
-import { getLanguageOption } from '../js/languageOptions';
+import { getLanguageOption } from '../utils/languageOptions';
 import language from '../language/language';
 import { LanguageProvider } from '../components/LanguageContext';
 import { LOCALE, SuppotedLanguage, defaultLanguage } from '../language';

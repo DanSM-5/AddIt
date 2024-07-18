@@ -3,8 +3,8 @@ import { View, StyleSheet } from 'react-native';
 
 import DifficultySettings from '../components/DifficultySettings';
 import GameComponent from '../components/GameComponent';
-import numbersSetGenerator from '../js/numbersSetGenerator';
-import { getTimerOption, TIMER_TYPES } from '../js/timerOptions';
+import numbersSetGenerator from '../utils/numbersSetGenerator';
+import { getTimerOption, TIMER_TYPES } from '../utils/timerOptions';
 import useStored from '../hooks/useStored';
 import { DIFFICULTIES, Dificulty } from '../language';
 import { GameSettings } from '../types/GameSettings';

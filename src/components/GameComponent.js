@@ -12,7 +12,7 @@ import { WON, PLAYING, LOST } from './GameStatus';
 import RandomNumber from './RandomNumber';
 import GameHeader from './GameHeader';
 import GameAnswer from './GameAnswer';
-import { isPortrait } from '../js/screenOrientation';
+import { isPortrait } from '../utils/screenOrientation';
 import NumericTimer from './NumericTimer';
 import LanguageContext from './LanguageContext';
 
