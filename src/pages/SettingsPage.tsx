@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  useColorScheme,
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { getTimerOption, setTimerOption, TimerType } from '../js/timerOptions';
 import { getLanguageOption, setLanguageOption } from '../js/languageOptions';
@@ -16,7 +22,8 @@ const SettingsPage = () => {
   const [timer, setTimer] = useState<TimerType | ''>('');
   const [language, setLanguage] = useState<SuppotedLanguage | ''>('');
   const sysConfig = useContext(LanguageContext);
-  const lang = sysConfig.dictionary;
+  const colorScheme = useColorScheme();
+  const dictionary = sysConfig.dictionary;
 
   useEffect(() => {
     const setInitial = async () => {
@@ -41,34 +48,46 @@ const SettingsPage = () => {
 
   const generatedTimerOptions = useMemo(() => {
     return (
-      Object.keys(lang.timerOptions) as (keyof typeof lang.timerOptions)[]
+      Object.keys(
+        dictionary.timerOptions,
+      ) as (keyof typeof dictionary.timerOptions)[]
     ).map((o, index) => (
       <View key={index}>
         <CheckBox
           checked={timer === o}
           center
-          title={lang.timerOptions[o]}
+          title={dictionary.timerOptions[o]}
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
           onPress={async () => await onPressTimerOption(o)}
         />
       </View>
     ));
-  }, [lang, timer]);
+  }, [dictionary, timer]);
 
   const generatedPickerItems = useMemo(() => {
+    const pickerItemStyle =
+      colorScheme === 'dark'
+        ? styles.pickerContentDark
+        : styles.pickerContentLight;
+
     return (
-      Object.keys(lang.languages) as (keyof typeof lang.languages)[]
+      Object.keys(dictionary.languages) as (keyof typeof dictionary.languages)[]
     ).reduce((acc: React.JSX.Element[], curr, i) => {
       acc.push(
-        <Picker.Item label={lang.languages[curr]} value={curr} key={i} />,
+        <Picker.Item
+          style={pickerItemStyle}
+          label={dictionary.languages[curr]}
+          value={curr}
+          key={i}
+        />,
       );
       return acc;
     }, []);
-  }, [lang]);
+  }, [dictionary, colorScheme]);
 
   if (language === '' || timer === '') {
-    return <LoadingMessage message={lang.loading} />;
+    return <LoadingMessage message={dictionary.loading} />;
   }
 
   return (
@@ -77,14 +96,17 @@ const SettingsPage = () => {
         <SettingsCard>
           <Card.Title>Display Timer</Card.Title>
           <Card.Divider />
-          <Text style={styles.text}>{lang.timerDescription}</Text>
+          <Text style={styles.text}>{dictionary.timerDescription}</Text>
           <View>{generatedTimerOptions}</View>
         </SettingsCard>
         <SettingsCard>
-          <Card.Title>{lang.language}</Card.Title>
-          <Text>{lang.languageDescription}</Text>
+          <Card.Title>{dictionary.language}</Card.Title>
+          <Text style={styles.text}>{dictionary.languageDescription}</Text>
           <Picker
+            style={styles.picker}
             selectedValue={language}
+            mode="dialog"
+            dropdownIconColor="#000"
             onValueChange={async (itemValue: SuppotedLanguage) =>
               await onLanguageValueChanged(itemValue)
             }>
@@ -110,6 +132,20 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
+    color: '#000',
+    paddingBottom: 10,
+  },
+  picker: {
+    borderColor: 'red',
+    borderWidth: 2,
+    backgroundColor: '#f0f0f0',
+    color: '#000',
+  },
+  pickerContentLight: {
+    color: 'black',
+  },
+  pickerContentDark: {
+    color: 'white',
   },
   container: {
     paddingBottom: 20,
