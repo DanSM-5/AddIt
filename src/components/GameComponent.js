@@ -15,6 +15,7 @@ import GameAnswer from './GameAnswer';
 import { isPortrait } from '../utils/screenOrientation';
 import NumericTimer from './NumericTimer';
 import LanguageContext from './LanguageContext';
+import { TIMER_TYPES } from '../utils/timerOptions';
 
 const GameComponent = ({
   gameSettings,
@@ -46,12 +47,6 @@ const GameComponent = ({
       setGame({ status: WON });
     }
   };
-
-  const onTimeEnd = useCallback(() => {
-    setGame(prevState =>
-      prevState.status === WON ? prevState : { status: LOST },
-    );
-  }, []);
 
   const isNumberSelected = index => selectedIds.indexOf(index) >= 0;
 
@@ -94,7 +89,13 @@ const GameComponent = ({
   });
 
   const TimerElement = useMemo(() => {
-    if (timerOption === 'Circular') {
+    const onTimeEnd = () => {
+      setGame(prevState =>
+        prevState.status === WON ? prevState : { status: LOST },
+      );
+    };
+
+    if (timerOption === TIMER_TYPES.CIRCULAR) {
       return () => (
         <AnimatedProgressWheel
           size={100}
@@ -107,10 +108,10 @@ const GameComponent = ({
           onAnimationComplete={onTimeEnd}
         />
       );
-    } else if (timerOption === 'Numeric') {
+    } else if (timerOption === TIMER_TYPES.NUMERIC) {
       return () => <NumericTimer timeLimit={timeLimit} onTimeEnd={onTimeEnd} />;
     }
-  }, [onTimeEnd, timeLimit, timerOption]);
+  }, [timeLimit, timerOption]);
 
   return (
     <View
@@ -165,7 +166,12 @@ const GameComponent = ({
       </View>
       {game.status === LOST && isPortraitOrientation ? (
         <GameAnswer answerNumbers={answerNumbers} />
-      ) : null}
+      ) : (
+        // Empty view for padding
+        <View>
+          <Text> </Text>
+        </View>
+      )}
     </View>
   );
 };

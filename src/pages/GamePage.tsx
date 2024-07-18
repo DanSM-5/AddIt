@@ -39,7 +39,10 @@ const GamePage = ({ route, navigation, mainNavigation }: GamePageProps) => {
   const victoryAndReset = () =>
     setGameInfo({ game: gameInfo.game + 1, score: gameInfo.score + 1 });
   const numbers = numbersSetGenerator(settings);
-  const [timerOption] = useStored(getTimerOption, TIMER_TYPES.CIRCULAR);
+  const [timerOption, loading] = useStored(
+    getTimerOption,
+    TIMER_TYPES.CIRCULAR,
+  );
   const onOrientationChanged = useCallback(
     (isPortrait: boolean) => {
       navigation.setOptions({ headerShown: isPortrait });
@@ -56,6 +59,10 @@ const GamePage = ({ route, navigation, mainNavigation }: GamePageProps) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <>

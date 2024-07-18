@@ -24,7 +24,8 @@ const NumericTimer = ({
       setTimer(prevState => {
         const reduced = prevState - 1;
         if (reduced <= 0) {
-          onTimeEnd();
+          // call onTimeEnd async
+          setTimeout(onTimeEnd, 0);
           clearInterval(intervalId);
           return 0;
         }
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: 100,
-    height: 60,
+    height: 70,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
