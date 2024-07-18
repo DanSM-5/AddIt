@@ -6,6 +6,7 @@ export const TIMER_TYPES = {
   NUMERIC: 'Numeric',
 } as const;
 
+export const defaultTime = TIMER_TYPES.CIRCULAR;
 export type TimerType = GetValues<typeof TIMER_TYPES>;
 
 export const getTimerOption = async (): Promise<TimerType> => {

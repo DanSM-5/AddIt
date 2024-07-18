@@ -1,48 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import MenuNavigation from './MenuNavigation';
 import { getLanguageOption } from '../js/languageOptions';
 import language from '../language/language';
 import { LanguageProvider } from '../components/LanguageContext';
-import { useLatest } from '../hooks/useLatest';
-import { SuppotedLanguage, defaultLanguage } from '../language';
+import { LOCALE, SuppotedLanguage, defaultLanguage } from '../language';
 import { SystemConfig } from '../components/LanguageContext';
 
 const AppNavigator = () => {
-    const [ systemConfig, setSystemConfig ] = useState<SystemConfig>({
-        language: language[defaultLanguage],
-        current: defaultLanguage,
-        setLanguage: () => {},
+  const [systemConfig, setSystemConfig] = useState<SystemConfig>({
+    dictionary: language[defaultLanguage],
+    language: defaultLanguage,
+    locale: LOCALE[defaultLanguage],
+    setLanguage: () => {},
+  });
+
+  const setLanguage = useCallback((selected: SuppotedLanguage) => {
+    setSystemConfig(prevState => {
+      if (prevState.language === selected) {
+        return prevState;
+      }
+
+      return {
+        setLanguage,
+        language: selected,
+        locale: LOCALE[selected],
+        dictionary: language[selected],
+      };
     });
-    const latestConfig = useLatest(systemConfig);
+  }, []);
 
-    useEffect(() => {
-        const load = async () => {
-            const lang = await getLanguageOption() ?? defaultLanguage;
+  useEffect(() => {
+    const load = async () => {
+      const lang = (await getLanguageOption()) ?? defaultLanguage;
 
-            const setLanguage = (selected: SuppotedLanguage) => {
-                if (selected === latestConfig.current.current) {
-                    return;
-                }
-                setSystemConfig((prevState) =>
-                    ({ ...prevState, language: language[selected] }));
-            };
+      setSystemConfig({
+        setLanguage,
+        language: lang,
+        locale: LOCALE[lang],
+        dictionary: language[lang],
+      });
+    };
 
-            setSystemConfig({
-                language: language[lang],
-                setLanguage,
-                current: lang,
-            });
-        }
+    load();
+  }, [setLanguage]);
 
-        load();
-    }, []);
-
-    return (<NavigationContainer>
-        <LanguageProvider value={systemConfig}>
-            <MenuNavigation />
-        </LanguageProvider>
+  return (
+    <NavigationContainer>
+      <LanguageProvider value={systemConfig}>
+        <MenuNavigation />
+      </LanguageProvider>
     </NavigationContainer>
-)};
+  );
+};
 
 export default AppNavigator;

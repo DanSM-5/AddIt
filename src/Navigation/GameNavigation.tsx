@@ -14,7 +14,7 @@ const GameNavigation = ({
   route: Record<string, unknown>;
   navigation: DrawerNavigationHelpers;
 }) => {
-  const { game, settings, chooseDif } = useContext(LanguageContext).language;
+  const { game, settings, chooseDif } = useContext(LanguageContext).dictionary;
   const HeaderRight = useMemo(() => {
     return () => <MenuButton navigation onPress={navigation.toggleDrawer} />;
   }, [navigation]);
@@ -29,7 +29,11 @@ const GameNavigation = ({
           headerRight: HeaderRight,
         }}
       />
-      <Game.Screen name="Game" component={GamePage} options={{ title: game }} />
+      <Game.Screen
+        name="Game"
+        component={GamePage as (param: unknown) => JSX.Element}
+        options={{ title: game }}
+      />
       <Game.Screen
         name="Settings"
         component={SettingsPage}

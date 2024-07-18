@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ScrollView,
   View,
@@ -13,7 +13,7 @@ import NumericInput from 'react-native-numeric-input';
  */
 
 /**
- * @typedef {import('../language/types').LanguageContent} LanguageContent
+ * @typedef {import('../language/types').DictionaryContent} LanguageContent
  */
 
 /**
@@ -31,19 +31,6 @@ const InputMenuOptionContent = ({ initial, lang, onCancel, onContinue }) => {
   const [maxToSelect, setMaxToSelect] = useState(initial.maxToSelect);
   const [minDigit, setMinDigit] = useState(initial.minDigit);
   const [maxDigit, setMaxDigit] = useState(initial.maxDigit);
-  const [maxDigitKey, setMaxDigitKey] = useState(0);
-  const [maxToSelectKey, setMaxToSelectKey] = useState(0);
-
-  useEffect(() => {
-    if (minDigit > maxDigit) {
-      setMaxDigit(minDigit);
-      setMaxDigitKey(prevState => prevState + 1);
-    }
-    if (maxToSelect > length) {
-      setMaxToSelect(length);
-      setMaxToSelectKey(prevState => prevState + 1);
-    }
-  }, [minDigit, length, maxToSelect, maxDigit]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
@@ -69,7 +56,6 @@ const InputMenuOptionContent = ({ initial, lang, onCancel, onContinue }) => {
       <View style={styles.valueContainer}>
         <Text style={styles.desc}>{lang.customMaxAnstDesc}</Text>
         <NumericInput
-          key={maxToSelectKey}
           value={maxToSelect}
           onChange={value => setMaxToSelect(value)}
           minValue={2}
@@ -82,6 +68,7 @@ const InputMenuOptionContent = ({ initial, lang, onCancel, onContinue }) => {
         <NumericInput
           value={minDigit}
           onChange={value => setMinDigit(value)}
+          maxValue={maxDigit}
           minValue={1}
           rounded
         />
@@ -89,7 +76,6 @@ const InputMenuOptionContent = ({ initial, lang, onCancel, onContinue }) => {
       <View style={styles.valueContainer}>
         <Text style={styles.desc}>{lang.customMaxValueDesc}</Text>
         <NumericInput
-          key={maxDigitKey}
           value={maxDigit}
           onChange={value => setMaxDigit(value)}
           minValue={minDigit}
@@ -107,6 +93,7 @@ const InputMenuOptionContent = ({ initial, lang, onCancel, onContinue }) => {
               {
                 time,
                 length,
+                minToSelect: 2, // constant
                 maxToSelect,
                 minDigit,
                 maxDigit,

@@ -16,7 +16,7 @@ const SettingsPage = () => {
   const [timer, setTimer] = useState<TimerType | ''>('');
   const [language, setLanguage] = useState<SuppotedLanguage | ''>('');
   const sysConfig = useContext(LanguageContext);
-  const lang = sysConfig.language;
+  const lang = sysConfig.dictionary;
 
   useEffect(() => {
     const setInitial = async () => {
@@ -30,12 +30,12 @@ const SettingsPage = () => {
   }, []);
 
   const onPressTimerOption = async (type: TimerType) => {
+    setTimerOption(type);
     setTimer(type);
-    await setTimerOption(type);
   };
   const onLanguageValueChanged = async (newLanguage: SuppotedLanguage) => {
+    setLanguageOption(newLanguage);
     setLanguage(newLanguage);
-    await setLanguageOption(newLanguage);
     sysConfig.setLanguage(newLanguage);
   };
 

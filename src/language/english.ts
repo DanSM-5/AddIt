@@ -1,6 +1,6 @@
-import { LanguageContent } from './types';
+import { DictionaryContent } from './types';
 
-export const englishContent: LanguageContent = {
+export const englishContent: DictionaryContent = {
   playAgain: 'Play Again!',
   timerDescription: 'Set the type of timer to be displayed in game.',
   timerOptions: {

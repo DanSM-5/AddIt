@@ -1,6 +1,6 @@
 import React from 'react';
 import DifficultySettings from './DifficultySettings';
-import { getPrevious } from '../js/prevCustomConfig';
+import { getGameSettings } from '../js/prevCustomConfig';
 import InputMenuOptionContent from './InputMenuOptionContent';
 import useStored from '../hooks/useStored';
 
@@ -9,7 +9,7 @@ import useStored from '../hooks/useStored';
  */
 
 /**
- * @typedef {import('../language/types').LanguageContent} LanguageContent
+ * @typedef {import('../language/types').DictionaryContent} LanguageContent
  */
 
 /**
@@ -22,13 +22,14 @@ import useStored from '../hooks/useStored';
  */
 const InputMenuOption = ({ onContinue, onCancel, lang }) => {
   const [previous, loading] = useStored(
-    getPrevious,
+    getGameSettings,
     DifficultySettings.DEFAULT,
   );
 
   if (loading) {
     return null;
   }
+
   return (
     <InputMenuOptionContent
       initial={previous}

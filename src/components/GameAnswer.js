@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import LanguageContext from './LanguageContext';
 
 const GameAnswer = ({ answerNumbers, isPortrait = true }) => {
-    const lang = useContext(LanguageContext).language;
+    const lang = useContext(LanguageContext).dictionary;
     return (
         <View style={styles.answer}>
             <Text>{isPortrait ? lang.answer : lang.a }: </Text>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback, useMemo } from 'react';
 import isEqual from 'lodash.isequal';
 import {
   View,
@@ -17,44 +17,60 @@ import {
   renderers,
 } from 'react-native-popup-menu';
 import InputMenuOption from '../components/InputMenuOption';
-import { setPrevious } from '../js/prevCustomConfig';
+import { setGameSettings } from '../js/prevCustomConfig';
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types';
 import { GameSettings } from '../types/GameSettings';
+import { DIFFICULTIES } from '../language';
+const { CUSTOM } = DIFFICULTIES;
 
 const HomePage = ({ navigation }: { navigation: DrawerNavigationHelpers }) => {
   const [portraitOrientation, setPortraitOrientation] = useState(true);
   const [open, setOpen] = useState(false);
-  const { difficulties } = useContext(LanguageContext).language;
-  const lang = useContext(LanguageContext).language;
+  const { difficulties } = useContext(LanguageContext).dictionary;
+  const lang = useContext(LanguageContext).dictionary;
 
   const onOrientationChanged = () => {
-    if (isPortrait()) {
-      setPortraitOrientation(true);
-    } else {
-      setPortraitOrientation(false);
-    }
+    setPortraitOrientation(isPortrait());
   };
 
-  const onContinue = async (settings: GameSettings, prev: GameSettings) => {
-    setOpen(false);
-    if (!isEqual(settings, prev)) {
-      await setPrevious(settings);
-    }
+  const onContinue = useCallback(
+    async (settings: GameSettings, prev: GameSettings) => {
+      setOpen(false);
 
-    navigation.navigate('Game', {
-      difficulty: 'CUSTOM',
-      settings: { ...settings, minToSelect: 2 },
-    });
-  };
+      if (!isEqual(settings, prev)) {
+        // no need to await the promise
+        setGameSettings(settings);
+      }
+
+      navigation.navigate('Game', {
+        difficulty: CUSTOM,
+        settings,
+      });
+    },
+    [navigation],
+  );
 
   const onCancel = () => {
     setOpen(false);
   };
 
-  const difficultyButtons = () =>
-    (Object.keys(difficulties) as (keyof typeof difficulties)[]).map(
+  const difficultyButtons = useMemo(() => {
+    const { width, height } = Dimensions.get('window');
+
+    const dynamicStyles = StyleSheet.create({
+      btnPortrait: {
+        height: Math.round(height) * 0.15,
+        width: Math.round(width) * 0.8,
+      },
+      btnLandscape: {
+        height: Math.round(height) * 0.2,
+        width: Math.round(width) * 0.6,
+      },
+    });
+
+    return (Object.keys(difficulties) as (keyof typeof difficulties)[]).map(
       (dif: keyof typeof difficulties, index) =>
-        dif !== 'CUSTOM' ? (
+        dif !== CUSTOM ? (
           <TouchableOpacity
             key={index}
             onPress={() => navigation.navigate('Game', { difficulty: dif })}
@@ -97,24 +113,12 @@ const HomePage = ({ navigation }: { navigation: DrawerNavigationHelpers }) => {
           </Menu>
         ),
     );
-
-  const { width, height } = Dimensions.get('window');
-
-  const dynamicStyles = StyleSheet.create({
-    btnPortrait: {
-      height: Math.round(height) * 0.15,
-      width: Math.round(width) * 0.8,
-    },
-    btnLandscape: {
-      height: Math.round(height) * 0.2,
-      width: Math.round(width) * 0.6,
-    },
-  });
+  }, [difficulties, lang, navigation, onContinue, open, portraitOrientation]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollScreen}>
       <View style={styles.container} onLayout={onOrientationChanged}>
-        {difficultyButtons()}
+        {difficultyButtons}
       </View>
     </ScrollView>
   );

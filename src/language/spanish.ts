@@ -1,6 +1,6 @@
-import { LanguageContent } from './types';
+import { DictionaryContent } from './types';
 
-export const spanishContent: LanguageContent = {
+export const spanishContent: DictionaryContent = {
   playAgain: 'Juega Otro!',
   timerDescription:
     'Selecciona el tipo de temporizador que se mostrará en el juego.',

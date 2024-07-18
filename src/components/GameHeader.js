@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions} from 'react-native';
 import LanguageContext from './LanguageContext';
 
 const GameHeader = ({ status, target, score, gameNumber, difficulty, isPortrait }) => {
-    const lang = useContext(LanguageContext).language;
+    const lang = useContext(LanguageContext).dictionary;
     const { width } = Dimensions.get('window');
     const dynamicStyles = StyleSheet.create({
         targetPortrait:{

@@ -3,12 +3,20 @@ export const SUPPORTED_LANGUAGES = {
   SPANISH: 'Spanish',
 } as const;
 
-export type SuppotedLanguage =
-  (typeof SUPPORTED_LANGUAGES)[keyof typeof SUPPORTED_LANGUAGES];
+export const DIFFICULTIES = {
+  EASY: 'EASY',
+  MEDIUM: 'MEDIUM',
+  HARD: 'HARD',
+  CUSTOM: 'CUSTOM',
+} as const;
+
+export type Dificulty = GetValues<typeof DIFFICULTIES>;
+
+export type SuppotedLanguage = GetValues<typeof SUPPORTED_LANGUAGES>;
 
 export const defaultLanguage = SUPPORTED_LANGUAGES.ENGLISH;
 
-export type LanguageContent = {
+export type DictionaryContent = {
   playAgain: string;
   timerDescription: string;
   timerOptions: {
@@ -20,10 +28,10 @@ export type LanguageContent = {
   chooseDif: string;
   game: string;
   difficulties: {
-    EASY: string;
-    MEDIUM: string;
-    HARD: string;
-    CUSTOM: string;
+    [DIFFICULTIES.EASY]: string;
+    [DIFFICULTIES.MEDIUM]: string;
+    [DIFFICULTIES.HARD]: string;
+    [DIFFICULTIES.CUSTOM]: string;
   };
   language: string;
   languages: {

@@ -27,7 +27,7 @@ const DrawerContent = ({
 }: {
   navigation: DrawerNavigationHelpers;
 }) => {
-  const lang = useContext(LanguageContext).language;
+  const lang = useContext(LanguageContext).dictionary;
   return (
     <DrawerContentScrollView>
       <DrawerItem label="" icon={IconImage} onPress={navigation.toggleDrawer} />
