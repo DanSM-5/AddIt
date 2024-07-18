@@ -1,7 +1,8 @@
-import { LanguageContent, SuppotedLanguage } from "../../language";
+import { DictionaryContent, SuppotedLanguage, Locale } from '../../language';
 
 export type SystemConfig = {
-    language: LanguageContent;
-    current: SuppotedLanguage;
-    setLanguage: (selected: SuppotedLanguage) => void;
+  dictionary: DictionaryContent;
+  locale: Locale;
+  language: SuppotedLanguage;
+  setLanguage: (selected: SuppotedLanguage) => void;
 };
