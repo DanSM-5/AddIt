@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
@@ -47,10 +47,11 @@ const GameComponent = ({
     }
   };
 
-  const onTimeEnd = () =>
+  const onTimeEnd = useCallback(() => {
     setGame(prevState =>
       prevState.status === WON ? prevState : { status: LOST },
     );
+  }, []);
 
   const isNumberSelected = index => selectedIds.indexOf(index) >= 0;
 
@@ -92,9 +93,9 @@ const GameComponent = ({
     },
   });
 
-  const timerElement = useMemo(() => {
+  const TimerElement = useMemo(() => {
     if (timerOption === 'Circular') {
-      return (
+      return () => (
         <AnimatedProgressWheel
           size={100}
           width={15}
@@ -107,9 +108,9 @@ const GameComponent = ({
         />
       );
     } else if (timerOption === 'Numeric') {
-      return <NumericTimer timeLimit={timeLimit} onTimeEnd={onTimeEnd} />;
+      return () => <NumericTimer timeLimit={timeLimit} onTimeEnd={onTimeEnd} />;
     }
-  }, [timeLimit, timerOption]);
+  }, [onTimeEnd, timeLimit, timerOption]);
 
   return (
     <View
@@ -141,7 +142,7 @@ const GameComponent = ({
       </View>
       <View style={styles.endGameArea}>
         {game.status === PLAYING ? (
-          timerElement
+          <TimerElement />
         ) : (
           <TouchableOpacity
             onPress={resetGame}
