@@ -35,7 +35,7 @@ const InputMenuOptionContent = ({
   onCancel,
   onContinue,
   portrait,
-}: ComponentProps) => {
+}: ComponentProps): JSX.Element => {
   const [time, setTime] = useState(initial.time);
   const [length, setLength] = useState(initial.length);
   const [maxToSelect, setMaxToSelect] = useState(initial.maxToSelect);
