@@ -2,18 +2,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
 import { memo, useMemo } from 'react';
-import { StyleSheet, useColorScheme, View } from 'react-native';
+import { StyleSheet, type TextStyle, useColorScheme, View, type ViewStyle } from 'react-native';
 
 const styles = StyleSheet.create({
   iconContainer: {
-    marginRight: 20,
   },
   icon: {
     padding: 10,
   },
 });
 
-const MenuIcon = () => {
+const MenuIcon = ({
+  containerStyles,
+  iconStyles,
+}: {
+  containerStyles?: ViewStyle,
+  iconStyles?: TextStyle,
+} = {}) => {
   const nav = useNavigation();
   const colorScheme = useColorScheme();
   const iconColor = useMemo(() => {
@@ -22,12 +27,12 @@ const MenuIcon = () => {
 
   return (
     <View
-      style={styles.iconContainer}
+      style={[styles.iconContainer, containerStyles]}
     >
       <Ionicons
         name='menu'
         size={24}
-        style={styles.icon}
+        style={[styles.icon, iconStyles]}
         color={iconColor}
         onPress={() => {
           nav.dispatch(DrawerActions.openDrawer());

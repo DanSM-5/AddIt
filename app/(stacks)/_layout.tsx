@@ -10,7 +10,7 @@ export const StacksRoot = () => {
           name='index'
           options={{
             title: 'Home',
-            headerRight: () => <MenuIconMemo />
+            headerLeft: () => <MenuIconMemo />
           }}
         />
         <Stack.Screen name="game/index" />

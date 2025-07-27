@@ -39,10 +39,14 @@ export default function RootLayout() {
                 }}
               />
               <Drawer.Screen
+                name="settings/Settings"
+                options={{
+                  title: 'Settings'
+                }}
+              />
+              <Drawer.Screen
                 name="+not-found"
                 options={{
-                  // drawerLabel: () => null,
-                  // drawerIcon: () => null,
                   drawerItemStyle: { display: 'none' },
                 }}
               />

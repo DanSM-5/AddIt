@@ -1,5 +1,5 @@
+import { SUPPORTED_LANGUAGES, SupportedLanguage } from '@/language';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SUPPORTED_LANGUAGES, SupportedLanguage } from '../language';
 
 const KEY = 'languageOptions' as const;
 

@@ -8,7 +8,7 @@ import {
 } from "@/language";
 import { isPortrait } from "@/utils/screenOrientation";
 import { createContext, Dispatch, PropsWithChildren, useCallback, useContext, useReducer } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 const language = languageModule.language;
 
@@ -119,6 +119,11 @@ const useIsPortrait = (): boolean => {
   return isPortrait;
 };
 
+const useSystemDispatch = () => {
+  const dispatch = useContext(SystemDispatchContext);
+  return dispatch;
+}
+
 const systemContext: { readonly current: SystemContext } = internalSystemContext;
 
 const styles = StyleSheet.create({
@@ -135,7 +140,9 @@ const styles = StyleSheet.create({
 
 export {
   SystemConfigProvider,
-  useLanguage,
-  useIsPortrait,
   systemContext,
+  useIsPortrait,
+  useLanguage,
+  useSystemDispatch
 };
+
