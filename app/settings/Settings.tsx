@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   pickerContentDark: {
-    color: 'white',
+    color: 'black',
   },
   container: {
     paddingBottom: 20,
