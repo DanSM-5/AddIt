@@ -1,0 +1,28 @@
+diff --git 1/android/app/build.gradle 2/android1/app/build.gradle
+index a05ce19..207dbfa 100644
+--- 1/android/app/build.gradle
++++ 2/android/app/build.gradle
+@@ -102,6 +102,14 @@ android {
+             keyAlias 'androiddebugkey'
+             keyPassword 'android'
+         }
++        release {
++            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
++                storeFile file("./my-upload-key.keystore")
++                storePassword MYAPP_UPLOAD_STORE_PASSWORD
++                keyAlias MYAPP_UPLOAD_KEY_ALIAS
++                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
++            }
++        }
+     }
+     buildTypes {
+         debug {
+@@ -110,7 +118,7 @@ android {
+         release {
+             // Caution! In production, you need to generate your own keystore file.
+             // see https://reactnative.dev/docs/signed-apk-android.
+-            signingConfig signingConfigs.debug
++            signingConfig signingConfigs.release
+             shrinkResources (findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
+             minifyEnabled enableProguardInReleaseBuilds
+             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
