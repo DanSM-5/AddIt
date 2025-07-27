@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "add-it",
-    "slug": "add-it",
-    "version": "1.0.0",
+    "name": "AddIt",
+    "slug": "AddIt",
+    "displayName": "AddIt",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "addit",
@@ -12,11 +13,13 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 10,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#fbeec1"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.eduardosanchez.addit"
     },
     "web": {
       "bundler": "metro",
@@ -31,7 +34,7 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#fbeec1"
         }
       ]
     ],
