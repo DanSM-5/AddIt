@@ -1,20 +1,25 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  ScrollView,
-} from 'react-native';
-import { useRouter } from 'expo-router';
+import InputMenuOption from "@/components/game/InputMenuOption";
+import { DIFFICULTIES } from "@/language";
+import { useIsPortrait, useLanguage } from "@/providers/SystemConfig";
 import { GameSettings } from "@/types/GameSettings";
 import { setGameSettings } from "@/utils/prevCustomConfig";
+import { useRouter } from "expo-router";
 import isEqual from "lodash.isequal";
 import { useCallback, useMemo, useState } from "react";
-import { DIFFICULTIES } from '@/language';
-import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
-import InputMenuOption from '@/components/game/InputMenuOption';
-import { useIsPortrait, useLanguage } from '@/providers/SystemConfig';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import {
+  Menu,
+  MenuOptions,
+  MenuTrigger,
+  renderers,
+} from "react-native-popup-menu";
 
 const { CUSTOM } = DIFFICULTIES;
 
@@ -23,15 +28,18 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const { difficulties } = useLanguage().dictionary;
   const router = useRouter();
-  
-  const onDificulty = useCallback((difficulty: Exclude<GetValues<typeof DIFFICULTIES>, typeof CUSTOM>) => {
-    router.navigate({
-      pathname: '/game',
-      params: {
-        difficulty,
-      },
-    })
-  }, [router]);
+
+  const onDificulty = useCallback(
+    (difficulty: Exclude<GetValues<typeof DIFFICULTIES>, typeof CUSTOM>) => {
+      router.navigate({
+        pathname: "/game",
+        params: {
+          difficulty,
+        },
+      });
+    },
+    [router]
+  );
 
   const onContinue = useCallback(
     async (settings: GameSettings, prev: GameSettings) => {
@@ -43,12 +51,12 @@ const Home = () => {
       }
 
       router.navigate({
-        pathname: '/game',
+        pathname: "/game",
         params: {
           ...settings,
           difficulty: CUSTOM,
         },
-      })
+      });
     },
     [router]
   );
@@ -111,13 +119,10 @@ const Home = () => {
                 optionsContainer: isPortrait
                   ? styles.popupMenuPortrait
                   : styles.popupMenuLandscape,
-                optionsWrapper: styles.menuOptionsWrapper
+                optionsWrapper: styles.menuOptionsWrapper,
               }}
             >
-              <InputMenuOption
-                onCancel={onCancel}
-                onContinue={onContinue}
-              />
+              <InputMenuOption onCancel={onCancel} onContinue={onContinue} />
             </MenuOptions>
           </Menu>
         )
@@ -126,36 +131,34 @@ const Home = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollScreen}>
-      <View style={styles.container}>
-        {difficultyButtons}
-      </View>
+      <View style={styles.container}>{difficultyButtons}</View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   text: {
-    color: 'white',
+    color: "white",
     fontSize: 50,
   },
   button: {
-    backgroundColor: '#2089dc',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#2089dc",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 40,
-    color: 'white',
-    borderColor: 'black',
-    borderStyle: 'solid',
+    color: "white",
+    borderColor: "black",
+    borderStyle: "solid",
     borderWidth: 6,
     marginVertical: 20,
   },
   container: {
-    backgroundColor: '#fbeec1',
+    backgroundColor: "#fbeec1",
     flex: 1,
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    alignContent: 'center',
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-around",
+    alignContent: "center",
   },
   scrollScreen: {
     flexGrow: 1,
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   menuOptionsWrapper: {
-    height: '100%',
+    height: "100%",
   },
   popupMenuPortrait: {
     borderRadius: 30,
