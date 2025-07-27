@@ -1,24 +1,24 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
-import AnimatedProgressWheel from './AnimatedProgressWheel';
-import { WON, PLAYING, LOST } from './GameStatus';
-import RandomNumber from './RandomNumber';
-import GameHeader from './GameHeader';
-import GameAnswer from './GameAnswer';
-import NumericTimer from './NumericTimer';
-import { TIMER_TYPES, TimerType } from '@/utils/timerOptions';
+import { GameStatus } from '@/constants/GameStatus';
+import { Difficulty } from '@/language';
 import { useIsPortrait, useLanguage } from '@/providers/SystemConfig';
 import type { GameInfo } from '@/types/GameInfo';
 import { GameSettings } from '@/types/GameSettings';
-import { Difficulty } from '@/language';
-import { GameStatus } from '@/constants/GameStatus';
+import { TIMER_TYPES, TimerType } from '@/utils/timerOptions';
+import AnimatedProgressWheel from './AnimatedProgressWheel';
+import GameAnswer from './GameAnswer';
+import GameHeader from './GameHeader';
+import { LOST, PLAYING, WON } from './GameStatus';
+import NumericTimer from './NumericTimer';
+import RandomNumber from './RandomNumber';
 
 interface GameComponentProps {
   onPlayAgain: () => void;

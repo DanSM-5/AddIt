@@ -1,6 +1,6 @@
-import React, { Fragment, PureComponent } from 'react';
-import { View, Animated, StyleSheet, Easing } from 'react-native';
 import PropTypes from 'prop-types';
+import React, { Fragment, PureComponent } from 'react';
+import { Animated, Easing, StyleSheet, View } from 'react-native';
 
 class AnimatedProgressWheel extends PureComponent {
   state = {
@@ -23,6 +23,10 @@ class AnimatedProgressWheel extends PureComponent {
     if (prevProps.progress !== this.props.progress) {
       this.state.animatedVal.setValue(this.props.progress);
     }
+  }
+  
+  componentWillUnmount() {
+    Animated.timing(this.state.animatedVal).stop();
   }
 
   interpolateAnimVal = (inputRange, outputRange) =>
