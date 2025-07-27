@@ -2,14 +2,13 @@ import DifficultySettings from '@/components/game/DifficultySettings';
 import GameComponent from '@/components/game/GameComponent';
 import useStored from '@/hooks/useStored';
 import { DIFFICULTIES, Difficulty } from '@/language';
-import { useIsPortrait } from '@/providers/SystemConfig';
 import { GameInfo } from '@/types/GameInfo';
 import { GameSettings } from '@/types/GameSettings';
 import { numbersSetGenerator } from '@/utils/numbersSetGenerator';
 import { getTimerOption, TIMER_TYPES } from '@/utils/timerOptions';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 const { CUSTOM } = DIFFICULTIES;
 
@@ -25,8 +24,7 @@ type GameParams = {
 
 const Game = () => {
   const params = useLocalSearchParams<GameParams>();
-  const navigation = useNavigation();
-  const isPortrait = useIsPortrait();
+  const navigation = useNavigation('/');
 
   const settings = useMemo<GameSettings>(() => {
     return params.difficulty !== CUSTOM
@@ -57,16 +55,14 @@ const Game = () => {
   );
 
   useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+
     return () => {
       // Always show navigations on exit
       navigation.setOptions({ headerShown: true });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    navigation.setOptions({ headerShown: isPortrait });
-  }, [isPortrait, navigation]);
 
   if (loading) {
     return null;
@@ -97,5 +93,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Game }
+export { Game };
 export default Game;

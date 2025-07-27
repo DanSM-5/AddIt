@@ -31,7 +31,7 @@ export default function RootLayout() {
           }
         >
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <Drawer screenOptions={{ headerShown: false }}>
+            <Drawer /*screenOptions={{ headerShown: false }}*/>
               <Drawer.Screen
                 name="(stacks)"
                 options={{
