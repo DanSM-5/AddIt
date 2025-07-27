@@ -6,9 +6,11 @@
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
-    "andrid:export": "expo prebuild",
-    "andrid:aab": "npx react-native build-android --mode=release",
+    "android:export": "expo prebuild",
+    "android:aab": "npx react-native build-android --mode=release",
     "android:apk": "expo run:android --variant release",
+    "android:prepare": "node scripts/prepare-android.js",
+    "android:release": "npm run android:prepare && npm run android:aab",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint"
