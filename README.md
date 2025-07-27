@@ -19,10 +19,9 @@ The game "Add It!" was created as a personal project to familiarize with the Rea
 
 To build for Android you need the following:
 
-- Node 18.6.0
-- Java 11 (open-jdk/microsoft open-jdk/oracle-jdk)
-- Android command-line tools or Android Studio.
-- Android Build tools (Target API 33 for expo and target API 34 for release)
+- Node 22.15.0 (provided `.nvmrc` file)
+- Java 17 (open-jdk/oracle-jdk) (`scoop install openjdk17`)
+- Android Build tools (adb) (`scoop install android-sdk`)
 
 ## How to build (Android)
 
@@ -32,34 +31,42 @@ git clone https://github.com/DanSM-5/AddIt
 ```
 2. Run `npm ci` to install the dependencies.
 
+3. Create a `.env.local` file in the root of the project:
+
+```bash
+MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
+MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
+MYAPP_UPLOAD_STORE_PASSWORD=***
+MYAPP_UPLOAD_KEY_PASSWORD=***
+```
+
+4. Add `<my-upload-key.keystore>` to the root of the project.
+
+5. Run the command
+
+```bash
+npm run android:prepare
+```
+
+The command will setup the required files for the android build process.
+
 ### Development
 
 1. Run the command
 
 ```bash
-npm start
+npm android
 ```
-
-2. When expo launches, type `a` for building for Android.
 
 ### Production
 
-1. Create a `local.properties` file in `./android` with the following variables:
+#### Build using gradlew (apk)
 
-```bash
-CERTIFICATE=<CERTIFICATE.keystore>
-KEY_ALIAS=<ALIAS>
-STORE_PASSWORD=<STORE_PASSWORD>
-KEY_PASSWORD=<KEY_PASSWORD>
-```
-
-2. Locate the `<CERTIFICATE.keystore>` under `./android` and `./android/app`.
-
-3. Build a release app using `gradlew`
+Execute the following commands to build
 
 ```bash
 cd android
-./gradle assembleRelease
+./gradlew assembleRelease
 ```
 
 or in windows
@@ -68,6 +75,21 @@ or in windows
 cd android
 gradle assembleRelease
 ```
+
+#### Build using react-native cli (aab)
+
+```bash
+npm run android:aab
+```
+
+#### Build using expo cli (apk)
+
+```bash
+npm run android:apk
+```
+
+> [!NOTE]
+> Using expo cli requires to have a real device or emulator connected through adb.
 
 ## Setup Environment
 
@@ -80,14 +102,14 @@ Set environment variables dependencies as follows:
 # bash/zsh
 export ANDROID_HOME="$HOME/scoop/apps/android-sdk/current"
 export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME:/platform-tools:$PATH"
-export JAVA_HOME="$HOME/scoop/apps/openjdk11/current"
+export JAVA_HOME="$HOME/scoop/apps/openjdk17/current"
 ```
 
 ```powershell
 # powershell
 $env:ANDROID_HOME = "$HOME/scoop/apps/android-sdk/current"
 $env:PATH = "$env:ANDROID_HOME/tools:$env:ANDROID_HOME/tools/bin:$env:ANDROID_HOME:/platform-tools:$env:PATH"
-$env:JAVA_HOME = "$HOME/scoop/apps/openjdk11/current"
+$env:JAVA_HOME = "$HOME/scoop/apps/openjdk17/current"
 ```
 
 ## Download the game
