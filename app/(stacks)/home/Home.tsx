@@ -38,7 +38,7 @@ const Home = () => {
         },
       });
     },
-    [router]
+    [router],
   );
 
   const onContinue = useCallback(
@@ -58,12 +58,12 @@ const Home = () => {
         },
       });
     },
-    [router]
+    [router],
   );
 
-  const onCancel = () => {
+  const onCancel = useCallback(() => {
     setOpen(false);
-  };
+  }, []);
 
   const difficultyButtons = useMemo(() => {
     const { width, height } = Dimensions.get("window");
@@ -125,9 +125,9 @@ const Home = () => {
               <InputMenuOption onCancel={onCancel} onContinue={onContinue} />
             </MenuOptions>
           </Menu>
-        )
+        ),
     );
-  }, [difficulties, isPortrait, open, onContinue, onDificulty]);
+  }, [difficulties, isPortrait, open, onContinue, onDificulty, onCancel]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollScreen}>
