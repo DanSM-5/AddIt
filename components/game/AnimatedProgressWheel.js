@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React, { Fragment, PureComponent } from 'react';
-import { Animated, Easing, StyleSheet, View } from 'react-native';
+import PropTypes from "prop-types";
+import React, { Fragment, PureComponent } from "react";
+import { Animated, Easing, StyleSheet, View } from "react-native";
 
 class AnimatedProgressWheel extends PureComponent {
   state = {
@@ -24,7 +24,7 @@ class AnimatedProgressWheel extends PureComponent {
       this.state.animatedVal.setValue(this.props.progress);
     }
   }
-  
+
   componentWillUnmount() {
     Animated.timing(this.state.animatedVal).stop();
   }
@@ -33,13 +33,13 @@ class AnimatedProgressWheel extends PureComponent {
     this.state.animatedVal.interpolate({
       inputRange,
       outputRange,
-      extrapolate: 'clamp',
+      extrapolate: "clamp",
     });
 
-  interpolateRotation = isSecondHalf =>
+  interpolateRotation = (isSecondHalf) =>
     this.interpolateAnimVal(isSecondHalf ? [50, 100] : [0, 50], [
-      '0deg',
-      '180deg',
+      "0deg",
+      "180deg",
     ]);
 
   interpolateRotationTwoOpacity = () =>
@@ -57,7 +57,7 @@ class AnimatedProgressWheel extends PureComponent {
       duration,
       easing,
       useNativeDriver: true,
-    }).start(state => this.props.onAnimationComplete(state));
+    }).start((state) => this.props.onAnimationComplete(state));
 
   circleHalf = (styles, isSecondHalf, color) => (
     <Animated.View
@@ -67,15 +67,17 @@ class AnimatedProgressWheel extends PureComponent {
           opacity: isSecondHalf ? this.interpolateRotationTwoOpacity() : 1,
           transform: [{ rotate: this.interpolateRotation(isSecondHalf) }],
         },
-      ]}>
+      ]}
+    >
       <View
         style={[
           styles.halfCircle,
           isSecondHalf && {
             bottom: 0,
-            transform: [{ rotate: '180deg' }],
+            transform: [{ rotate: "180deg" }],
           },
-        ]}>
+        ]}
+      >
         <View style={[styles.circleArc, { borderColor: color }]} />
       </View>
     </Animated.View>
@@ -104,9 +106,10 @@ class AnimatedProgressWheel extends PureComponent {
         {fullColor && (
           <Animated.View
             style={{
-              position: 'absolute',
+              position: "absolute",
               opacity: this.interpolateColorOpacity(),
-            }}>
+            }}
+          >
             {this.renderLoader(styles, fullColor)}
           </Animated.View>
         )}
@@ -116,8 +119,8 @@ class AnimatedProgressWheel extends PureComponent {
 }
 
 AnimatedProgressWheel.defaultProps = {
-  color: 'white',
-  backgroundColor: 'gray',
+  color: "white",
+  backgroundColor: "gray",
   size: 200,
   width: 25,
   progress: 0,
@@ -151,7 +154,7 @@ const generateStyles = ({ size, width, color, backgroundColor }) =>
       borderRadius: size / 2,
       borderWidth: width,
       borderColor: backgroundColor,
-      position: 'absolute',
+      position: "absolute",
     },
     cutOff: {
       width: size,
@@ -161,13 +164,13 @@ const generateStyles = ({ size, width, color, backgroundColor }) =>
       borderRadius: size / 2,
     },
     secondHalfContainer: {
-      position: 'absolute',
+      position: "absolute",
     },
     halfCircle: {
       width: size,
       height: size / 2,
-      overflow: 'hidden',
-      position: 'absolute',
+      overflow: "hidden",
+      position: "absolute",
     },
     circleArc: {
       width: size,

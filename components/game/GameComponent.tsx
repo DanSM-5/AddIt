@@ -1,24 +1,24 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
+} from "react-native";
 
-import { GameStatus } from '@/constants/GameStatus';
-import { Difficulty } from '@/language';
-import { useIsPortrait, useLanguage } from '@/providers/SystemConfig';
-import type { GameInfo } from '@/types/GameInfo';
-import { GameSettings } from '@/types/GameSettings';
-import { TIMER_TYPES, TimerType } from '@/utils/timerOptions';
-import AnimatedProgressWheel from './AnimatedProgressWheel';
-import GameAnswer from './GameAnswer';
-import GameHeader from './GameHeader';
-import { LOST, PLAYING, WON } from './GameStatus';
-import NumericTimer from './NumericTimer';
-import RandomNumber from './RandomNumber';
+import { GameStatus } from "@/constants/GameStatus";
+import { Difficulty } from "@/language";
+import { useIsPortrait, useLanguage } from "@/providers/SystemConfig";
+import type { GameInfo } from "@/types/GameInfo";
+import { GameSettings } from "@/types/GameSettings";
+import { TIMER_TYPES, TimerType } from "@/utils/timerOptions";
+import { MemorizedCircularTimer } from "./CircularTimer";
+import GameAnswer from "./GameAnswer";
+import GameHeader from "./GameHeader";
+import { LOST, PLAYING, WON } from "./GameStatus";
+import NumericTimer from "./NumericTimer";
+import RandomNumber from "./RandomNumber";
 
 interface GameComponentProps {
   onPlayAgain: () => void;
@@ -26,7 +26,11 @@ interface GameComponentProps {
   gameProgress: GameInfo;
   gameSettings: GameSettings;
   difficulty: Difficulty;
-  numbersSettings: readonly [target: number, source: number[], answer: number[]];
+  numbersSettings: readonly [
+    target: number,
+    source: number[],
+    answer: number[],
+  ];
   timerOption: TimerType;
 }
 
@@ -79,7 +83,7 @@ const GameComponent = ({
 
   const resetGame = () => (game.status === WON ? onVictory() : onPlayAgain());
 
-  const { width } = Dimensions.get('window');
+  const { width } = Dimensions.get("window");
 
   const dynamicStyles = StyleSheet.create({
     btnPortrait: {
@@ -94,25 +98,21 @@ const GameComponent = ({
 
   const TimerElement = useMemo(() => {
     const onTimeEnd = () => {
-      setGame(prevState =>
+      setGame((prevState) =>
         prevState.status === WON ? prevState : { status: LOST },
       );
     };
 
-    const Component = timerOption === TIMER_TYPES.CIRCULAR ?
-      () => (
-        <AnimatedProgressWheel
-          size={100}
-          width={15}
-          progress={100}
-          animateFromValue={0}
-          duration={timeLimit}
-          color="#2089dc"
-          backgroundColor="#3d5875"
-          onAnimationComplete={onTimeEnd}
-        />
-      ) : () => <NumericTimer timeLimit={timeLimit} onTimeEnd={onTimeEnd} />;
-  
+    const Component =
+      timerOption === TIMER_TYPES.CIRCULAR
+        ? () => (
+            <MemorizedCircularTimer
+              onTimeEnd={onTimeEnd}
+              timeLimit={timeLimit}
+            />
+          )
+        : () => <NumericTimer timeLimit={timeLimit} onTimeEnd={onTimeEnd} />;
+
     return Component;
   }, [timeLimit, timerOption]);
 
@@ -154,15 +154,14 @@ const GameComponent = ({
               isPortraitOrientation
                 ? dynamicStyles.btnPortrait
                 : dynamicStyles.btnLandscape,
-            ]}>
-            <Text style={styles['button-text']}>{lang.playAgain}</Text>
+            ]}
+          >
+            <Text style={styles["button-text"]}>{lang.playAgain}</Text>
           </TouchableOpacity>
         )}
 
         {game.status === LOST && !isPortraitOrientation ? (
-          <GameAnswer
-            answerNumbers={answerNumbers}
-          />
+          <GameAnswer answerNumbers={answerNumbers} />
         ) : null}
       </View>
       {game.status === LOST && isPortraitOrientation ? (
@@ -182,33 +181,33 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   landscapeLayout: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   randomContainer: {
     flex: 3,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    alignContent: 'center',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    alignContent: "center",
   },
   endGameArea: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   button: {
-    backgroundColor: '#2089dc',
+    backgroundColor: "#2089dc",
     height: 50,
     borderRadius: 10,
-    justifyContent: 'center',
-    borderColor: 'black',
-    borderStyle: 'solid',
+    justifyContent: "center",
+    borderColor: "black",
+    borderStyle: "solid",
     borderWidth: 3,
   },
-  'button-text': {
-    justifyContent: 'center',
-    textAlign: 'center',
-    color: 'white',
+  "button-text": {
+    justifyContent: "center",
+    textAlign: "center",
+    color: "white",
     fontSize: 30,
   },
 });
