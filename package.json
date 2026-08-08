@@ -55,7 +55,7 @@
     "react-native-webview": "13.13.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
+    "@babel/core": "^7.29.6",
     "@react-native-community/cli": "^19.1.2",
     "@types/lodash.isequal": "^4.5.8",
     "@types/prop-types": "^15.7.15",
