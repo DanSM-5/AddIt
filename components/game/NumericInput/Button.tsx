@@ -1,9 +1,6 @@
 import React from 'react';
 import {
-  Platform,
   TouchableOpacity,
-  TouchableNativeFeedback,
-  View,
   ViewStyle,
   StyleProp,
 } from 'react-native';

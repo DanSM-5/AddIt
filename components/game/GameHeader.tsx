@@ -1,8 +1,7 @@
 // @ts-check
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import LanguageContext from './LanguageContext';
 import { useIsPortrait, useLanguage } from '@/providers/SystemConfig';
 import { GameStatus } from '@/constants/GameStatus';
 import { Difficulty } from '@/language';

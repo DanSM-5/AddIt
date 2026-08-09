@@ -96,24 +96,18 @@ const GameComponent = ({
     },
   });
 
-  const TimerElement = useMemo(() => {
+  const timerElement = useMemo(() => {
     const onTimeEnd = () => {
       setGame((prevState) =>
         prevState.status === WON ? prevState : { status: LOST },
       );
     };
 
-    const Component =
-      timerOption === TIMER_TYPES.CIRCULAR
-        ? () => (
-            <MemorizedCircularTimer
-              onTimeEnd={onTimeEnd}
-              timeLimit={timeLimit}
-            />
-          )
-        : () => <NumericTimer timeLimit={timeLimit} onTimeEnd={onTimeEnd} />;
-
-    return Component;
+    return timerOption === TIMER_TYPES.CIRCULAR ? (
+      <MemorizedCircularTimer onTimeEnd={onTimeEnd} timeLimit={timeLimit} />
+    ) : (
+      <NumericTimer timeLimit={timeLimit} onTimeEnd={onTimeEnd} />
+    );
   }, [timeLimit, timerOption]);
 
   return (
@@ -145,7 +139,7 @@ const GameComponent = ({
       </View>
       <View style={styles.endGameArea}>
         {game.status === PLAYING ? (
-          <TimerElement />
+          timerElement
         ) : (
           <TouchableOpacity
             onPress={resetGame}
