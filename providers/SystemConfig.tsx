@@ -128,7 +128,7 @@ const systemContext: { readonly current: SystemContext } = internalSystemContext
 
 const styles = StyleSheet.create({
   hidden: {
-    visibility: 'hidden',
+    opacity: 0,
     pointerEvents: 'none',
     width: '100%',
     height: '100%',
@@ -145,4 +145,3 @@ export {
   useLanguage,
   useSystemDispatch
 };
-

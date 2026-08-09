@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Button from './Button';
+import NumericInputButton from './Button';
 import { create, PREDEF_RES } from '@/utils/pixelPerfect';
 
 let calcSize = create(PREDEF_RES.iphone7.px);
@@ -473,7 +473,7 @@ export default class NumericInput extends Component<
           />
           {/* @ts-ignore Review later style issues */}
           <View style={upDownStyle}>
-            <Button
+            <NumericInputButton
               onPress={this.inc}
               style={style.buttonStyle} disabled={false}>
               <Ionicons
@@ -489,8 +489,8 @@ export default class NumericInput extends Component<
                   minReached ? this.props.reachMinIncIconStyle : {},
                 ]}
               />
-            </Button>
-            <Button
+            </NumericInputButton>
+            <NumericInputButton
               onPress={this.dec}
               style={style.buttonStyle} disabled={false}>
               <Ionicons
@@ -506,7 +506,7 @@ export default class NumericInput extends Component<
                   minReached ? this.props.reachMinDecIconStyle : {},
                 ]}
               />
-            </Button>
+            </NumericInputButton>
           </View>
         </View>
       );
@@ -514,7 +514,7 @@ export default class NumericInput extends Component<
       return (
         <View style={inputContainerStyle}>
           {/* @ts-ignore Review later style issues */}
-          <Button onPress={this.dec} style={leftButtonStyle}>
+          <NumericInputButton onPress={this.dec} style={leftButtonStyle}>
             <Ionicons
               name={
                 this.props.decreaseIconNameOverride
@@ -528,7 +528,7 @@ export default class NumericInput extends Component<
                 minReached ? this.props.reachMinDecIconStyle : {},
               ]}
             />
-          </Button>
+          </NumericInputButton>
           {/* @ts-ignore Review later style issues */}
           <View style={[inputWraperStyle]}>
             <TextInput
@@ -546,7 +546,7 @@ export default class NumericInput extends Component<
             />
           </View>
           {/* @ts-ignore Review later style issues */}
-          <Button onPress={this.inc} style={rightButtonStyle}>
+          <NumericInputButton onPress={this.inc} style={rightButtonStyle}>
             <Ionicons
               name={
                 this.props.increaseIconNameOverride
@@ -560,7 +560,7 @@ export default class NumericInput extends Component<
                 minReached ? this.props.reachMinIncIconStyle : {},
               ]}
             />
-          </Button>
+          </NumericInputButton>
         </View>
       );
     }
