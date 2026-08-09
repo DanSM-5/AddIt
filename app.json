@@ -2,13 +2,11 @@
   "expo": {
     "name": "AddIt",
     "slug": "AddIt",
-    "displayName": "AddIt",
     "version": "1.3.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "addit",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
@@ -18,7 +16,6 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#fbeec1"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.eduardosanchez.addit"
     },
     "web": {
@@ -36,7 +33,11 @@
           "resizeMode": "contain",
           "backgroundColor": "#fbeec1"
         }
-      ]
+      ],
+      "expo-font",
+      "expo-image",
+      "expo-web-browser",
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true
