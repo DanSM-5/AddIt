@@ -1,4 +1,5 @@
 import InputMenuOption from "@/components/game/InputMenuOption";
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { DIFFICULTIES } from "@/language";
 import { useIsPortrait, useLanguage } from "@/providers/SystemConfig";
 import { GameSettings } from "@/types/GameSettings";
@@ -28,6 +29,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const { difficulties } = useLanguage().dictionary;
   const router = useRouter();
+  const colors = useThemeColors();
 
   const onDificulty = useCallback(
     (difficulty: Exclude<GetValues<typeof DIFFICULTIES>, typeof CUSTOM>) => {
@@ -79,6 +81,12 @@ const Home = () => {
       },
     });
 
+    const buttonColors = {
+      backgroundColor: colors.primary,
+      borderColor: colors.outline,
+    };
+    const textColor = { color: colors.onPrimary };
+
     return (Object.keys(difficulties) as (keyof typeof difficulties)[]).map(
       (dif: keyof typeof difficulties, index) =>
         dif !== CUSTOM ? (
@@ -87,12 +95,13 @@ const Home = () => {
             onPress={() => onDificulty(dif)}
             style={[
               styles.button,
+              buttonColors,
               isPortrait
                 ? dynamicStyles.btnPortrait
                 : dynamicStyles.btnLandscape,
             ]}
           >
-            <Text style={styles.text}>{difficulties[dif]}</Text>
+            <Text style={[styles.text, textColor]}>{difficulties[dif]}</Text>
           </TouchableOpacity>
         ) : (
           <Menu
@@ -100,25 +109,30 @@ const Home = () => {
             opened={open}
             onBackdropPress={() => setOpen(false)}
             renderer={renderers.Popover}
+            rendererProps={{ anchorStyle: { backgroundColor: colors.surface } }}
           >
             {isPortrait ? <MenuTrigger /> : null}
             <TouchableOpacity
               style={[
                 styles.button,
+                buttonColors,
                 isPortrait
                   ? dynamicStyles.btnPortrait
                   : dynamicStyles.btnLandscape,
               ]}
               onPress={() => setOpen(true)}
             >
-              <Text style={styles.text}>{difficulties[dif]}</Text>
+              <Text style={[styles.text, textColor]}>{difficulties[dif]}</Text>
             </TouchableOpacity>
             {isPortrait ? null : <MenuTrigger />}
             <MenuOptions
               customStyles={{
-                optionsContainer: isPortrait
-                  ? styles.popupMenuPortrait
-                  : styles.popupMenuLandscape,
+                optionsContainer: [
+                  isPortrait
+                    ? styles.popupMenuPortrait
+                    : styles.popupMenuLandscape,
+                  { backgroundColor: colors.surface },
+                ],
                 optionsWrapper: styles.menuOptionsWrapper,
               }}
             >
@@ -127,33 +141,28 @@ const Home = () => {
           </Menu>
         ),
     );
-  }, [difficulties, isPortrait, open, onContinue, onDificulty, onCancel]);
+  }, [difficulties, isPortrait, open, onContinue, onDificulty, onCancel, colors]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollScreen}>
-      <View style={styles.container}>{difficultyButtons}</View>
+      <View style={[styles.container, { backgroundColor: colors.screen }]}>{difficultyButtons}</View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   text: {
-    color: "white",
     fontSize: 50,
   },
   button: {
-    backgroundColor: "#2089dc",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 40,
-    color: "white",
-    borderColor: "black",
     borderStyle: "solid",
     borderWidth: 6,
     marginVertical: 20,
   },
   container: {
-    backgroundColor: "#fbeec1",
     flex: 1,
     flexWrap: "wrap",
     alignItems: "center",

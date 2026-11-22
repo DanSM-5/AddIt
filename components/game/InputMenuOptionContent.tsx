@@ -10,6 +10,7 @@ import {
 import { NumericInput } from './NumericInput';
 import { GameSettings } from '@/types/GameSettings';
 import { useIsPortrait, useLanguage } from '@/providers/SystemConfig';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 interface ComponentProps {
   initial: GameSettings;
@@ -37,6 +38,19 @@ const InputMenuOptionContent = ({
   const [minDigit, setMinDigit] = useState(initial.minDigit);
   const [maxDigit, setMaxDigit] = useState(initial.maxDigit);
   const dictionary = useLanguage().dictionary;
+  const colors = useThemeColors();
+  const descStyle = [styles.desc, { color: colors.text }];
+  const buttonStyle = [styles.button, { backgroundColor: colors.primary }];
+  const buttonTextStyle = { color: colors.onPrimary };
+  // Shared colour props for every NumericInput
+  const inputColors = {
+    iconStyle: { color: colors.text },
+    textColor: colors.text,
+    borderColor: colors.inputBorder,
+    rightButtonBackgroundColor: colors.surface,
+    leftButtonBackgroundColor: colors.surface,
+    upDownButtonsBackgroundColor: colors.surface,
+  };
 
   return (
     <View
@@ -44,18 +58,18 @@ const InputMenuOptionContent = ({
 
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{dictionary.customTimeDesc}</Text>
+          <Text style={descStyle}>{dictionary.customTimeDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={time}
             onChange={value => setTime(value)}
             minValue={1}
-            iconStyle={styles.iconStyle}
+            {...inputColors}
             rounded
           />
         </View>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{dictionary.customLenghtDesc}</Text>
+          <Text style={descStyle}>{dictionary.customLenghtDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={length}
@@ -71,53 +85,53 @@ const InputMenuOptionContent = ({
             }}
             minValue={3}
             maxValue={9}
-            iconStyle={styles.iconStyle}
+            {...inputColors}
             rounded
           />
         </View>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{dictionary.customMaxAnstDesc}</Text>
+          <Text style={descStyle}>{dictionary.customMaxAnstDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={maxToSelect}
             onChange={setMaxToSelect}
             minValue={2}
             maxValue={length}
-            iconStyle={styles.iconStyle}
+            {...inputColors}
             rounded
           />
         </View>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{dictionary.customMinValueDesc}</Text>
+          <Text style={descStyle}>{dictionary.customMinValueDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={minDigit}
             onChange={setMinDigit}
             maxValue={maxDigit}
             minValue={1}
-            iconStyle={styles.iconStyle}
+            {...inputColors}
             rounded
           />
         </View>
         <View style={styles.valueContainer}>
-          <Text style={styles.desc}>{dictionary.customMaxValueDesc}</Text>
+          <Text style={descStyle}>{dictionary.customMaxValueDesc}</Text>
           <NumericInput
             type="plus-minus"
             value={maxDigit}
             onChange={setMaxDigit}
             minValue={minDigit}
-            iconStyle={styles.iconStyle}
+            {...inputColors}
             rounded
           />
         </View>
       </ScrollView>
   
       <View style={styles.buttonsArea}>
-        <TouchableOpacity style={styles.button} onPress={onCancel}>
-          <Text style={styles.text}>{dictionary.cancel}</Text>
+        <TouchableOpacity style={buttonStyle} onPress={onCancel}>
+          <Text style={buttonTextStyle}>{dictionary.cancel}</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={buttonStyle}
           onPress={() =>
             onContinue(
               {
@@ -131,7 +145,7 @@ const InputMenuOptionContent = ({
               initial,
             )
           }>
-          <Text style={styles.text}>{dictionary.ok}</Text>
+          <Text style={buttonTextStyle}>{dictionary.ok}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -164,7 +178,6 @@ const styles = StyleSheet.create({
   },
   desc: {
     textAlign: 'center',
-    color: 'black',
     paddingBottom: 10,
   },
   buttonsArea: {
@@ -178,17 +191,10 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 4,
-    backgroundColor: '#2089dc',
     justifyContent: 'center',
     alignItems: 'center',
     width: 70,
     height: 30,
-  },
-  text: {
-    color: 'white',
-  },
-  iconStyle: {
-    color: 'black',
   },
 });
 

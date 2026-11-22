@@ -11,14 +11,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { GameHighlightColors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useThemeColors } from "@/hooks/useThemeColors";
 
 export type NumberHighlight = "correct" | "wrong" | null;
-
-// Button base colours are not themed yet (shared with the rest of the game screen).
-const BASE_COLOR = "#2089dc";
-const BASE_TEXT_COLOR = "white";
 
 const FLASH_DURATION = 1200; // ms for each half of the flash (to blue / back)
 
@@ -64,22 +59,21 @@ const RandomNumber = ({
     return () => cancelAnimation(flashProgress);
   }, [flash, flashProgress]);
 
-  const palette =
-    GameHighlightColors[useColorScheme() === "dark" ? "dark" : "light"];
+  const colors = useThemeColors();
 
   const isHighlighted = highlight !== null || flash;
   const baseColor =
     highlight === "correct"
-      ? palette.correct
+      ? colors.highlightCorrect
       : highlight === "wrong"
-        ? palette.wrong
-        : BASE_COLOR;
-  // Highlighted buttons use the palette's text colour; on the default blue
-  // keep white text and blend it towards the palette's as the flash peaks.
+        ? colors.highlightWrong
+        : colors.primary;
+  // Highlighted buttons use the highlight text colour; on the primary colour
+  // keep its text colour and blend it towards the highlight's as the flash peaks.
   const baseTextColor =
-    highlight !== null ? palette.highlightedText : BASE_TEXT_COLOR;
-  const flashColor = palette.flash;
-  const flashTextColor = palette.highlightedText;
+    highlight !== null ? colors.onHighlight : colors.onPrimary;
+  const flashColor = colors.highlightFlash;
+  const flashTextColor = colors.onHighlightFlash;
 
   const circleAnimatedStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
@@ -114,7 +108,13 @@ const RandomNumber = ({
       disabled={!isActive}
       style={styles.touchable}
     >
-      <Animated.View style={[styles["number-container"], circleAnimatedStyle]}>
+      <Animated.View
+        style={[
+          styles["number-container"],
+          { borderColor: colors.outline },
+          circleAnimatedStyle,
+        ]}
+      >
         <Animated.Text
           style={[styles.random, textAnimatedStyle, isDimmed && styles.selected]}
         >
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     justifyContent: "center",
-    borderColor: "black",
     borderStyle: "solid",
     borderWidth: 6,
   },

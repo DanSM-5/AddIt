@@ -1,4 +1,5 @@
 import LoadingMessage from '@/components/LoadingMessage';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { SupportedLanguage } from '@/language';
 import { useLanguage, useSystemDispatch } from '@/providers/SystemConfig';
 import { getLanguageOption, setLanguageOption } from '@/utils/languageOptions';
@@ -7,14 +8,14 @@ import { Picker } from '@react-native-picker/picker';
 import { Card, CheckBox } from '@rn-vui/base';
 import { useNavigation } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export const Settings = () => {
   const navigation = useNavigation();
   const [timer, setTimer] = useState<TimerType | ''>('');
   const [language, setLanguage] = useState<SupportedLanguage | ''>('');
   const dictionary = useLanguage().dictionary;
-  const colorScheme = useColorScheme();
+  const colors = useThemeColors();
   const dispatch = useSystemDispatch();
 
   useEffect(() => {
@@ -59,19 +60,23 @@ export const Settings = () => {
           checked={timer === o}
           center
           title={dictionary.timerOptions[o]}
+          containerStyle={{
+            backgroundColor: colors.surfaceVariant,
+            borderColor: colors.inputBorder,
+          }}
+          textStyle={{ color: colors.text }}
+          checkedColor={colors.primary}
+          uncheckedColor={colors.icon}
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
           onPress={async () => await onPressTimerOption(o)}
         />
       </View>
     ));
-  }, [dictionary, timer]);
+  }, [dictionary, timer, colors]);
 
   const generatedPickerItems = useMemo(() => {
-    const pickerItemStyle =
-      colorScheme === 'dark'
-        ? styles.pickerContentDark
-        : styles.pickerContentLight;
+    const pickerItemStyle = { color: colors.text };
 
     return (
       Object.keys(dictionary.languages) as (keyof typeof dictionary.languages)[]
@@ -86,29 +91,39 @@ export const Settings = () => {
       );
       return acc;
     }, []);
-  }, [dictionary, colorScheme]);
+  }, [dictionary, colors]);
 
   if (language === '' || timer === '') {
     return <LoadingMessage message={dictionary.loading} />;
   }
 
+  const cardStyle = {
+    backgroundColor: colors.surface,
+    borderColor: colors.inputBorder,
+  };
+  const titleStyle = { color: colors.text };
+  const textStyle = [styles.text, { color: colors.text }];
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.center}>
-        <Card>
-          <Card.Title>Display Timer</Card.Title>
-          <Card.Divider />
-          <Text style={styles.text}>{dictionary.timerDescription}</Text>
+        <Card containerStyle={cardStyle}>
+          <Card.Title style={titleStyle}>Display Timer</Card.Title>
+          <Card.Divider color={colors.inputBorder} />
+          <Text style={textStyle}>{dictionary.timerDescription}</Text>
           <View>{generatedTimerOptions}</View>
         </Card>
-        <Card>
-          <Card.Title>{dictionary.language}</Card.Title>
-          <Text style={styles.text}>{dictionary.languageDescription}</Text>
+        <Card containerStyle={cardStyle}>
+          <Card.Title style={titleStyle}>{dictionary.language}</Card.Title>
+          <Text style={textStyle}>{dictionary.languageDescription}</Text>
           <Picker
-            style={styles.picker}
+            style={{
+              backgroundColor: colors.surfaceVariant,
+              color: colors.text,
+            }}
             selectedValue={language}
             mode="dialog"
-            dropdownIconColor="#000"
+            dropdownIconColor={colors.text}
             onValueChange={async (itemValue: SupportedLanguage) =>
               await onLanguageValueChanged(itemValue)
             }>
@@ -134,18 +149,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    color: '#000',
     paddingBottom: 10,
-  },
-  picker: {
-    backgroundColor: '#f0f0f0',
-    color: '#000',
-  },
-  pickerContentLight: {
-    color: 'black',
-  },
-  pickerContentDark: {
-    color: 'black',
   },
   container: {
     paddingBottom: 20,

@@ -1,10 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 const LoadingMessage = ({ message }: { message: string }) => {
+  const colors = useThemeColors();
+
   return (
     <View style={styles.loadingView}>
-      <Text style={styles.loadingText}>{message}</Text>
+      <Text style={[styles.loadingText, { color: colors.text }]}>{message}</Text>
     </View>
   );
 };

@@ -5,6 +5,7 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { useIsPortrait, useLanguage } from '@/providers/SystemConfig';
 import { GameStatus } from '@/constants/GameStatus';
 import { Difficulty } from '@/language';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 interface GameHeaderProps {
   status: GameStatus;
@@ -23,6 +24,13 @@ const GameHeader = ({
 }: GameHeaderProps) => {
   const isPortrait = useIsPortrait();
   const lang = useLanguage().dictionary;
+  const colors = useThemeColors();
+  const textColor = { color: colors.text };
+  const statusColors = {
+    PLAYING: { backgroundColor: colors.primary, color: colors.onPrimary },
+    WON: { backgroundColor: colors.statusWon, color: colors.onStatus },
+    LOST: { backgroundColor: colors.statusLost, color: colors.onStatus },
+  }[status];
   const { width } = Dimensions.get('window');
   const dynamicStyles = StyleSheet.create({
     targetPortrait: {
@@ -40,7 +48,7 @@ const GameHeader = ({
           styles.targetContainer,
           !isPortrait && styles.targetContainerLandsCape,
         ]}>
-        <Text style={styles.difficulty}>{lang.difficulties[difficulty]}</Text>
+        <Text style={[styles.difficulty, textColor]}>{lang.difficulties[difficulty]}</Text>
         <Text
           style={[
             styles.target,
@@ -48,16 +56,17 @@ const GameHeader = ({
             isPortrait
               ? dynamicStyles.targetPortrait
               : dynamicStyles.targetLandscape,
-            styles[`STATUS_${status}`],
+            { borderColor: colors.outline },
+            statusColors,
           ]}>
           {lang.topMessage[status]} {target}
         </Text>
       </View>
       <View style={isPortrait ? styles.info : styles.infoLandscape}>
-        <Text style={styles.labels}>
+        <Text style={textColor}>
           {lang.score}: {score}
         </Text>
-        <Text style={styles.labels}>
+        <Text style={textColor}>
           {lang.games}: {gameNumber}
         </Text>
       </View>
@@ -66,9 +75,6 @@ const GameHeader = ({
 };
 
 const styles = StyleSheet.create({
-  labels: {
-    color: 'black',
-  },
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -76,7 +82,6 @@ const styles = StyleSheet.create({
   difficulty: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#000',
   },
   targetContainer: {
     alignItems: 'center',
@@ -91,7 +96,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
     textAlign: 'center',
     borderRadius: 20,
-    borderColor: 'black',
     borderStyle: 'solid',
     borderWidth: 2,
     paddingVertical: 3,
@@ -111,16 +115,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignSelf: 'center',
     paddingTop: 10,
-  },
-  STATUS_WON: {
-    backgroundColor: '#66cc00',
-  },
-  STATUS_PLAYING: {
-    backgroundColor: '#2089dc',
-    color: 'white',
-  },
-  STATUS_LOST: {
-    backgroundColor: 'red',
   },
 });
 

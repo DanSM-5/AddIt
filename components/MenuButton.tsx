@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from 'expo-router/react-navigation';
 import { useNavigation } from 'expo-router';
-import { memo, useMemo } from 'react';
-import { StyleSheet, type TextStyle, useColorScheme, View, type ViewStyle } from 'react-native';
+import { memo } from 'react';
+import { StyleSheet, type TextStyle, View, type ViewStyle } from 'react-native';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 const styles = StyleSheet.create({
   iconContainer: {
@@ -20,10 +21,7 @@ const MenuIcon = ({
   iconStyles?: TextStyle,
 } = {}) => {
   const nav = useNavigation();
-  const colorScheme = useColorScheme();
-  const iconColor = useMemo(() => {
-    return colorScheme === 'dark' ? 'white' : 'dark'
-  }, [colorScheme]);
+  const iconColor = useThemeColors().text;
 
   return (
     <View

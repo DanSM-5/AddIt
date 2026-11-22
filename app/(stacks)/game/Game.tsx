@@ -1,6 +1,7 @@
 import DifficultySettings from '@/components/game/DifficultySettings';
 import GameComponent from '@/components/game/GameComponent';
 import useStored from '@/hooks/useStored';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { DIFFICULTIES, Difficulty } from '@/language';
 import { GameInfo } from '@/types/GameInfo';
 import { GameSettings } from '@/types/GameSettings';
@@ -64,13 +65,15 @@ const Game = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const colors = useThemeColors();
+
   if (loading) {
     return null;
   }
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.screen }]}>
         <GameComponent
           key={gameInfo.game}
           onPlayAgain={resetGame}
@@ -88,7 +91,6 @@ const Game = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fbeec1',
     flex: 1,
   },
 });

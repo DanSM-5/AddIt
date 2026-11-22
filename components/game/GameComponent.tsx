@@ -9,6 +9,7 @@ import {
 
 import { GameStatus } from "@/constants/GameStatus";
 import { Difficulty } from "@/language";
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { useIsPortrait, useLanguage } from "@/providers/SystemConfig";
 import type { GameInfo } from "@/types/GameInfo";
 import { GameSettings } from "@/types/GameSettings";
@@ -49,6 +50,7 @@ const GameComponent = ({
   const [gameScore, setGameScore] = useState(score);
   const timeLimit = gameSettings.time * 1000;
   const lang = useLanguage().dictionary;
+  const colors = useThemeColors();
 
   const calcGameStatus = (arr: number[]) => {
     const sumSelected = arr.reduce((acc, curr) => {
@@ -163,12 +165,13 @@ const GameComponent = ({
             onPress={resetGame}
             style={[
               styles.button,
+              { backgroundColor: colors.primary, borderColor: colors.outline },
               isPortraitOrientation
                 ? dynamicStyles.btnPortrait
                 : dynamicStyles.btnLandscape,
             ]}
           >
-            <Text style={styles["button-text"]}>{lang.playAgain}</Text>
+            <Text style={[styles["button-text"], { color: colors.onPrimary }]}>{lang.playAgain}</Text>
           </TouchableOpacity>
         )}
 
@@ -208,18 +211,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button: {
-    backgroundColor: "#2089dc",
     height: 50,
     borderRadius: 10,
     justifyContent: "center",
-    borderColor: "black",
     borderStyle: "solid",
     borderWidth: 3,
   },
   "button-text": {
     justifyContent: "center",
     textAlign: "center",
-    color: "white",
     fontSize: 30,
   },
 });

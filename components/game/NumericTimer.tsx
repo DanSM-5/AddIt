@@ -1,13 +1,12 @@
 import React, { useState, useEffect, memo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
-const calcTimerStyle = (time: number, limit: number) => {
+type TimeLeft = 'full' | 'half' | 'none';
+
+const calcTimeLeft = (time: number, limit: number): TimeLeft => {
   const progress = time / (limit / 1000);
-  const word = progress >= 0.5 ? 'Full' : progress >= 0.2 ? 'Half' : 'No';
-  return {
-    textStyle: `text${word}Time`,
-    containerStyle: `container${word}Time`,
-  } as const;
+  return progress >= 0.5 ? 'full' : progress >= 0.2 ? 'half' : 'none';
 };
 
 const NumericTimer = ({
@@ -18,6 +17,7 @@ const NumericTimer = ({
   onTimeEnd: () => void;
 }) => {
   const [timer, setTimer] = useState(timeLimit / 1000);
+  const colors = useThemeColors();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -36,11 +36,20 @@ const NumericTimer = ({
     return () => clearInterval(intervalId);
   }, [onTimeEnd]);
 
-  const { textStyle, containerStyle } = calcTimerStyle(timer, timeLimit);
+  const [background, color] = {
+    full: [colors.primary, colors.onPrimary],
+    half: [colors.timerWarning, colors.onTimerWarning],
+    none: [colors.statusLost, colors.onStatus],
+  }[calcTimeLeft(timer, timeLimit)];
 
   return (
-    <View style={[styles.container, styles[containerStyle]]}>
-      <Text style={[styles.text, styles[textStyle]]}>{timer}</Text>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: background, borderColor: colors.outline },
+      ]}
+    >
+      <Text style={[styles.text, { color }]}>{timer}</Text>
     </View>
   );
 };
@@ -56,27 +65,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    borderColor: 'black',
     borderStyle: 'solid',
     borderWidth: 3,
-  },
-  containerFullTime: {
-    backgroundColor: '#2089dc',
-  },
-  textFullTime: {
-    color: 'white',
-  },
-  containerHalfTime: {
-    backgroundColor: '#ffd300',
-  },
-  textHalfTime: {
-    color: 'black',
-  },
-  containerNoTime: {
-    backgroundColor: 'red',
-  },
-  textNoTime: {
-    color: 'black',
   },
 });
 
