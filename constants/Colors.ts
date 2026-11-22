@@ -24,3 +24,23 @@ export const Colors = {
     tabIconSelected: tintColorDark,
   },
 };
+
+/**
+ * End-of-game feedback on the number buttons.
+ * Light: pastel backgrounds with dark text. Dark: deeper, muted tones with
+ * light text so they don't glare on dark surfaces.
+ */
+export const GameHighlightColors = {
+  light: {
+    correct: '#a5e6a1', // light green
+    wrong: '#f4a6a6', // light red
+    flash: '#9fd8ff', // light blue
+    highlightedText: '#1b1b1b',
+  },
+  dark: {
+    correct: '#2e7d32', // deep green
+    wrong: '#b23b3b', // deep red
+    flash: '#4fa8e0', // muted blue
+    highlightedText: '#ffffff',
+  },
+} as const;

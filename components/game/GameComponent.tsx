@@ -12,13 +12,14 @@ import { Difficulty } from "@/language";
 import { useIsPortrait, useLanguage } from "@/providers/SystemConfig";
 import type { GameInfo } from "@/types/GameInfo";
 import { GameSettings } from "@/types/GameSettings";
+import type { NumbersSet } from "@/utils/numbersSetGenerator";
 import { TIMER_TYPES, TimerType } from "@/utils/timerOptions";
 import { MemorizedCircularTimer } from "./CircularTimer";
 import GameAnswer from "./GameAnswer";
 import GameHeader from "./GameHeader";
 import { LOST, PLAYING, WON } from "./GameStatus";
 import NumericTimer from "./NumericTimer";
-import RandomNumber from "./RandomNumber";
+import RandomNumber, { NumberHighlight } from "./RandomNumber";
 
 interface GameComponentProps {
   onPlayAgain: () => void;
@@ -26,11 +27,7 @@ interface GameComponentProps {
   gameProgress: GameInfo;
   gameSettings: GameSettings;
   difficulty: Difficulty;
-  numbersSettings: readonly [
-    target: number,
-    source: number[],
-    answer: number[],
-  ];
+  numbersSettings: NumbersSet;
   timerOption: TimerType;
 }
 
@@ -46,7 +43,8 @@ const GameComponent = ({
   const [game, setGame] = useState<{ status: GameStatus }>({ status: PLAYING });
   const isPortraitOrientation = useIsPortrait();
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [target, gameNumbers, answerNumbers] = numbersSettings;
+  const [target, gameNumbers, answerNumbers, answerIndexList] =
+    numbersSettings;
   const { score, game: numberOfGame } = gameProgress;
   const [gameScore, setGameScore] = useState(score);
   const timeLimit = gameSettings.time * 1000;
@@ -63,6 +61,24 @@ const GameComponent = ({
   };
 
   const isNumberSelected = (index: number) => selectedIds.indexOf(index) >= 0;
+
+  const answerIndices = useMemo(
+    () => new Set(answerIndexList),
+    [answerIndexList],
+  );
+
+  const getHighlight = (index: number): NumberHighlight => {
+    if (!isNumberSelected(index)) {
+      return null;
+    }
+    if (game.status === WON) {
+      return "correct";
+    }
+    if (game.status === LOST) {
+      return "wrong";
+    }
+    return null;
+  };
 
   const selectNumber = (index: number) => {
     const updatedSelectedIds = [...selectedIds, index];
@@ -133,6 +149,8 @@ const GameComponent = ({
             onPress={selectNumber}
             onPressDisabled={unselectNumber}
             isActive={game.status === PLAYING}
+            highlight={getHighlight(index)}
+            flash={game.status === LOST && answerIndices.has(index)}
             id={index}
           />
         ))}

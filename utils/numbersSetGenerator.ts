@@ -6,32 +6,34 @@ type CalculatorProps = {
   maxDigit: number;
 };
 
+export type NumbersSet = Readonly<
+  [target: number, source: number[], answer: number[], answerIndices: number[]]
+>;
+
 export const numbersSetGenerator = ({
   length,
   minToSelect,
   maxToSelect,
   minDigit,
   maxDigit,
-}: CalculatorProps): Readonly<
-  [target: number, source: number[], answer: number[]]
-> => {
+}: CalculatorProps): NumbersSet => {
   if (!length) {
-    return [0, [], []];
+    return [0, [], [], []];
   }
 
   const randomSource = randomNumbers(length, minDigit, maxDigit);
 
-  const chosenFromSource = selectRandom(randomSource, minToSelect, maxToSelect);
+  const chosenIndices = selectRandom(randomSource, minToSelect, maxToSelect);
 
-  const [target, answer] = getTargetAndAnswer(
-    chosenFromSource,
+  const [target, answerIndices] = getTargetAndAnswer(
+    chosenIndices,
     randomSource,
     maxToSelect,
   );
 
-  return [target, randomSource, answer] as Readonly<
-    [target: number, source: number[], answer: number[]]
-  >;
+  const answer = answerIndices.map(index => randomSource[index]);
+
+  return [target, randomSource, answer, answerIndices] as NumbersSet;
 };
 
 export const getRandomBetween = (from: number, to: number) =>
@@ -41,52 +43,64 @@ export const randomNumbers = (length: number, min: number, max: number) =>
   Array.from({ length }).map(() => getRandomBetween(min, max));
 // min + Math.floor((max - min + 1) * Math.random()));
 
+/** Picks between `min` and `max` distinct positions of `source`. */
 export const selectRandom = (source: number[], min: number, max: number) => {
-  const indexes = new Map<number, number>();
+  const indexes = new Set<number>();
+  const count = Math.min(getRandomBetween(min, max), source.length);
 
-  return Array.from({ length: getRandomBetween(min, max) }).map(_ => {
+  return Array.from({ length: count }).map(_ => {
     const index = getRandomUnrepeatedIndex(indexes, source.length);
-    indexes.set(index, index);
+    indexes.add(index);
 
-    return source[index];
+    return index;
   });
 };
 
-const getRandomUnrepeatedIndex = (map: Map<number, number>, max: number) => {
+const getRandomUnrepeatedIndex = (used: Set<number>, max: number) => {
   while (true) {
     const indexVal = Math.floor(Math.random() * max);
 
-    if (!map.has(indexVal)) {
+    if (!used.has(indexVal)) {
       return indexVal;
     }
   }
 };
 
+/**
+ * Works on positions of `source`, so every answer entry refers to a distinct
+ * button even when the same value appears more than once.
+ */
 export const getTargetAndAnswer = (
-  arrToAdd: number[],
-  arrToCompare: number[],
+  indicesToAdd: number[],
+  source: number[],
   maxLength: number,
-): [total: number, answer: number[]] => {
-  const answerArr = [...arrToAdd];
+): [total: number, answerIndices: number[]] => {
+  const answerIndices = [...indicesToAdd];
 
   while (true) {
-    const target = answerArr.reduce((acc, curr) => acc + curr, 0);
-    const isSingleDigitSolution = arrToCompare.some(num => num === target);
+    const target = answerIndices.reduce((acc, index) => acc + source[index], 0);
+    // A single unused button holding the target would be a trivial solution:
+    // add that button to the answer and recompute.
+    const singleDigitIndex = source.findIndex(
+      (num, index) => num === target && !answerIndices.includes(index),
+    );
 
-    if (isSingleDigitSolution) {
-      answerArr.push(target); // Add big digit
+    if (singleDigitIndex >= 0) {
+      answerIndices.push(singleDigitIndex); // Add big digit
       continue;
     }
 
-    if (answerArr.length > maxLength) {
-      // If answerArr gets too big
+    if (answerIndices.length > maxLength) {
+      // If the answer gets too big
       // remove the smallest item and calc again
-      const min = Math.min(...answerArr);
-      answerArr.splice(answerArr.indexOf(min), 1);
+      const smallest = answerIndices.reduce((minPos, index, pos) =>
+        source[index] < source[answerIndices[minPos]] ? pos : minPos,
+      0);
+      answerIndices.splice(smallest, 1);
       continue;
     }
 
-    return [target, answerArr];
+    return [target, answerIndices];
   }
 };
 
