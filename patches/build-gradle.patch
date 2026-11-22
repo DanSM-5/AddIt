@@ -1,8 +1,8 @@
-diff --git 1/android/app/build.gradle 2/android1/app/build.gradle
-index a05ce19..207dbfa 100644
---- 1/android/app/build.gradle
-+++ 2/android/app/build.gradle
-@@ -102,6 +102,14 @@ android {
+diff --git a/android/app/build.gradle b/android/app/build.gradle
+index ca68d55..a52a812 100644
+--- a/android/app/build.gradle
++++ b/android/app/build.gradle
+@@ -104,6 +104,14 @@ android {
              keyAlias 'androiddebugkey'
              keyPassword 'android'
          }
@@ -17,12 +17,12 @@ index a05ce19..207dbfa 100644
      }
      buildTypes {
          debug {
-@@ -110,7 +118,7 @@ android {
+@@ -112,7 +120,7 @@ android {
          release {
              // Caution! In production, you need to generate your own keystore file.
              // see https://reactnative.dev/docs/signed-apk-android.
 -            signingConfig signingConfigs.debug
 +            signingConfig signingConfigs.release
-             shrinkResources (findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
-             minifyEnabled enableProguardInReleaseBuilds
-             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+             def enableShrinkResources = findProperty('android.enableShrinkResourcesInReleaseBuilds') ?: 'false'
+             shrinkResources enableShrinkResources.toBoolean()
+             minifyEnabled enableMinifyInReleaseBuilds
