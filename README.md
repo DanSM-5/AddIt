@@ -20,8 +20,10 @@ The game "Add It!" was created as a personal project to familiarize with the Rea
 To build for Android you need the following:
 
 - Node 22.15.0 (provided `.nvmrc` file)
-- Java 17 (open-jdk/oracle-jdk) (`scoop install openjdk17`)
-- Android Build tools (adb) (`scoop install android-sdk`)
+- Java 21 (open-jdk/oracle-jdk) (`scoop install openjdk21`)
+- Android SDK Platform 36 and Build Tools 36.0.0 (`scoop install android-sdk`)
+  - Expo SDK 57 / React Native 0.86 builds with `compileSdk` 36, `targetSdk` 36 and `minSdk` 24.
+- Gradle 9.3.1. Gradle does **not** need to be installed: it is downloaded by the Gradle wrapper (`gradlew`) that `npm run android:prepare` generates. Always use the wrapper, not a globally installed `gradle`.
 
 ## How to build (Android)
 
@@ -73,7 +75,50 @@ or in windows
 
 ```powershell
 cd android
-gradle assembleRelease
+.\gradlew.bat assembleRelease
+```
+
+#### Clean Gradle build
+
+Gradle keeps its caches and daemons in a home directory (`~/.gradle`, or `GRADLE_USER_HOME` if set) that is
+shared with every other Gradle project on the machine. If another project used a different Gradle version or
+setup, the build can fail with errors that have nothing to do with this project, for example:
+
+```
+node_modules/@react-native/gradle-plugin/settings.gradle.kts: Unresolved reference 'plugins'.
+```
+
+To get a clean build, stop the running daemons, clean the project and build with a Gradle home that is only used by this project:
+
+```bash
+# bash/zsh
+cd android
+./gradlew --stop
+export GRADLE_USER_HOME="$HOME/.gradle-addit"
+./gradlew clean
+./gradlew app:bundleRelease   # or assembleRelease for an apk
+```
+
+```powershell
+# powershell
+cd android
+.\gradlew.bat --stop
+$env:GRADLE_USER_HOME = "$HOME\.gradle-addit"
+.\gradlew.bat clean
+.\gradlew.bat app:bundleRelease   # or assembleRelease for an apk
+```
+
+The first build with a new Gradle home takes longer because it downloads Gradle 9.3.1 and the dependencies again.
+
+> [!WARNING]
+> On Windows keep `GRADLE_USER_HOME` short (such as `$HOME\.gradle-addit`). The native (CMake/ninja) build uses
+> paths deep inside the Gradle home and fails with `Filename longer than 260 characters` if it is too long.
+
+If the build still fails, regenerate the native project from scratch (the `android` folder is generated and ignored by git):
+
+```bash
+rm -rf android   # powershell: Remove-Item -Recurse -Force android
+npm run android:prepare
 ```
 
 #### Build using react-native cli (aab)
@@ -102,14 +147,14 @@ Set environment variables dependencies as follows:
 # bash/zsh
 export ANDROID_HOME="$HOME/scoop/apps/android-sdk/current"
 export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME:/platform-tools:$PATH"
-export JAVA_HOME="$HOME/scoop/apps/openjdk17/current"
+export JAVA_HOME="$HOME/scoop/apps/openjdk21/current"
 ```
 
 ```powershell
 # powershell
 $env:ANDROID_HOME = "$HOME/scoop/apps/android-sdk/current"
 $env:PATH = "$env:ANDROID_HOME/tools:$env:ANDROID_HOME/tools/bin:$env:ANDROID_HOME:/platform-tools:$env:PATH"
-$env:JAVA_HOME = "$HOME/scoop/apps/openjdk17/current"
+$env:JAVA_HOME = "$HOME/scoop/apps/openjdk21/current"
 ```
 
 ## Download the game
