@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { DrawerActions } from '@react-navigation/native';
+import { DrawerActions } from 'expo-router/react-navigation';
 import { useNavigation } from 'expo-router';
 import { memo, useMemo } from 'react';
 import { StyleSheet, type TextStyle, useColorScheme, View, type ViewStyle } from 'react-native';

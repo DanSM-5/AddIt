@@ -1,6 +1,6 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SystemConfigProvider } from '@/providers/SystemConfig';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router/react-navigation';
 import { useFonts } from 'expo-font';
 import { Drawer } from 'expo-router/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
