@@ -1,0 +1,19 @@
+# Normalize all text files to LF in the repository and in the working tree,
+# regardless of the contributor's OS or core.autocrlf setting.
+* text=auto eol=lf
+
+# Binary assets: never touch line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.jar binary
+*.keystore binary
+*.aab binary
+*.apk binary
