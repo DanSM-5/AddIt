@@ -14,8 +14,11 @@
     "android:version": "node scripts/bump-version.mjs",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint:types": "tsc --noEmit",
+    "lint:types": "node node_modules/typescript-7/bin/tsc --noEmit",
+    "lint:types:legacy": "node node_modules/typescript/bin/tsc --noEmit",
     "lint": "expo lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "version": "npm run android:version && git add app.json"
   },
   "dependencies": {
@@ -59,7 +62,9 @@
     "@types/react": "~19.2.10",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~57.0.2",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "typescript-7": "npm:typescript@~7.1.0-beta",
+    "vitest": "^5.1.1"
   },
   "private": true
 }

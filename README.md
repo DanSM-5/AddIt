@@ -136,6 +136,25 @@ npm run android:apk
 > [!NOTE]
 > Using expo cli requires to have a real device or emulator connected through adb.
 
+## Testing and checks
+
+```bash
+npm test              # run unit tests once (Vitest)
+npm run test:watch    # re-run tests on change
+npm run lint:types    # type-check with TypeScript 7 (native compiler)
+npm run lint          # ESLint
+```
+
+Unit tests (`*.test.ts`) cover plain TypeScript logic and run in Node with
+[Vitest](https://vitest.dev). Vite is only used by the test runner; the app is
+still bundled by Metro.
+
+> [!NOTE]
+> TypeScript 7 is installed under the `typescript-7` alias and used only for
+> type-checking. `typescript` stays on 6.x because ESLint (`typescript-eslint`)
+> and other tooling still need its JavaScript API.
+> `npm run lint:types:legacy` type-checks with TypeScript 6.
+
 ## Setup Environment
 
 ### Windows
