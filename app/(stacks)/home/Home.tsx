@@ -8,11 +8,11 @@ import { useRouter } from "expo-router";
 import isEqual from "lodash.isequal";
 import { useCallback, useMemo, useState } from "react";
 import {
-  Dimensions,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import {
@@ -23,6 +23,8 @@ import {
 } from "react-native-popup-menu";
 
 const { CUSTOM } = DIFFICULTIES;
+// Space kept free above and below the custom game popup
+const POPUP_MARGIN = 40;
 
 const Home = () => {
   const isPortrait = useIsPortrait();
@@ -30,6 +32,7 @@ const Home = () => {
   const { difficulties } = useLanguage().dictionary;
   const router = useRouter();
   const colors = useThemeColors();
+  const { width, height } = useWindowDimensions();
 
   const onDificulty = useCallback(
     (difficulty: Exclude<GetValues<typeof DIFFICULTIES>, typeof CUSTOM>) => {
@@ -68,8 +71,6 @@ const Home = () => {
   }, []);
 
   const difficultyButtons = useMemo(() => {
-    const { width, height } = Dimensions.get("window");
-
     const dynamicStyles = StyleSheet.create({
       btnPortrait: {
         height: Math.round(height) * 0.15,
@@ -86,6 +87,10 @@ const Home = () => {
       borderColor: colors.outline,
     };
     const textColor = { color: colors.onPrimary };
+    // Keep the custom game popup inside short (landscape) windows; its
+    // content scrolls when there is not enough room.
+    const popupSize = isPortrait ? styles.popupMenuPortrait : styles.popupMenuLandscape;
+    const popupHeight = { height: Math.min(popupSize.height, height - POPUP_MARGIN) };
 
     return (Object.keys(difficulties) as (keyof typeof difficulties)[]).map(
       (dif: keyof typeof difficulties, index) =>
@@ -128,9 +133,8 @@ const Home = () => {
             <MenuOptions
               customStyles={{
                 optionsContainer: [
-                  isPortrait
-                    ? styles.popupMenuPortrait
-                    : styles.popupMenuLandscape,
+                  popupSize,
+                  popupHeight,
                   { backgroundColor: colors.surface },
                 ],
                 optionsWrapper: styles.menuOptionsWrapper,
@@ -141,7 +145,7 @@ const Home = () => {
           </Menu>
         ),
     );
-  }, [difficulties, isPortrait, open, onContinue, onDificulty, onCancel, colors]);
+  }, [difficulties, isPortrait, open, onContinue, onDificulty, onCancel, colors, width, height]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollScreen}>

@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react";
 import {
-  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
@@ -101,7 +101,7 @@ const GameComponent = ({
 
   const resetGame = () => (game.status === WON ? onVictory() : onPlayAgain());
 
-  const { width } = Dimensions.get("window");
+  const { width } = useWindowDimensions();
 
   const dynamicStyles = StyleSheet.create({
     btnPortrait: {
@@ -130,6 +130,7 @@ const GameComponent = ({
 
   return (
     <View
+      testID="game-container"
       style={[
         styles.gameContainer,
         !isPortraitOrientation && styles.landscapeLayout,
@@ -162,6 +163,7 @@ const GameComponent = ({
           timerElement
         ) : (
           <TouchableOpacity
+            testID="play-again"
             onPress={resetGame}
             style={[
               styles.button,

@@ -6,9 +6,8 @@ import {
   LOCALE,
   SupportedLanguage,
 } from "@/language";
-import { isPortrait } from "@/utils/screenOrientation";
-import { createContext, Dispatch, PropsWithChildren, useCallback, useContext, useReducer } from "react";
-import { StyleSheet, View } from "react-native";
+import { createContext, Dispatch, PropsWithChildren, useContext, useReducer } from "react";
+import { useWindowDimensions } from "react-native";
 
 const language = languageModule.language;
 
@@ -20,7 +19,6 @@ interface LanguageContextType {
 
 interface SystemContext {
   language: LanguageContextType;
-  orientation: boolean;
 }
 
 const initalState: SystemContext = {
@@ -29,24 +27,17 @@ const initalState: SystemContext = {
     language: defaultLanguage,
     locale: LOCALE[defaultLanguage],
   },
-  orientation: false,
 }
 
 const LanguageContext = createContext(initalState.language);
-const OrientationContext = createContext(false);
 const SystemDispatchContext = createContext<Dispatch<Action>>(() => {});
-
-interface ActionOrientation {
-  type: 'orientation',
-  payload: boolean,
-}
 
 interface ActionLanguage {
   type: 'dictionary',
   payload: SupportedLanguage,
 }
 
-type Action = ActionLanguage | ActionOrientation;
+type Action = ActionLanguage;
 
 const unhandledAction = (never: never) => {
   console.error('Unknonw action received:', never);
@@ -68,12 +59,6 @@ const reducer = (state: SystemContext, action: Action): SystemContext => {
         }
       };
     }
-    case 'orientation': {
-      return {
-        ...state,
-        orientation: action.payload,
-      }
-    }
     default:
       return unhandledAction(type)
   }
@@ -83,12 +68,6 @@ const internalSystemContext: { current: SystemContext } = { current: initalState
 
 const SystemConfigProvider = ({ children }: PropsWithChildren ) => {
   const [context, dispatch] = useReducer(reducer, initalState);
-  const onOrientationChanged = useCallback(() => {
-    dispatch({
-      type: 'orientation',
-      payload: isPortrait(),
-    });
-  }, []);
 
   if (__DEV__ && typeof window !== 'undefined') {
     (window as any)._systemContext = context;
@@ -96,16 +75,11 @@ const SystemConfigProvider = ({ children }: PropsWithChildren ) => {
   internalSystemContext.current = context;
 
   return (
-    <>
-      <View style={styles.hidden} onLayout={onOrientationChanged}></View>
-      <LanguageContext.Provider value={context.language}>
-        <OrientationContext.Provider value={context.orientation}>
-          <SystemDispatchContext.Provider value={dispatch}>
-            {children}
-          </SystemDispatchContext.Provider>
-        </OrientationContext.Provider>
-      </LanguageContext.Provider>
-    </>
+    <LanguageContext.Provider value={context.language}>
+      <SystemDispatchContext.Provider value={dispatch}>
+        {children}
+      </SystemDispatchContext.Provider>
+    </LanguageContext.Provider>
   );
 };
 
@@ -114,9 +88,13 @@ const useLanguage = (): LanguageContextType => {
   return language;
 };
 
+/**
+ * Whether the app window is taller than it is wide. Re-renders on rotation
+ * and on window resizes (split screen, freeform/desktop windows).
+ */
 const useIsPortrait = (): boolean => {
-  const isPortrait = useContext(OrientationContext);
-  return isPortrait;
+  const { width, height } = useWindowDimensions();
+  return height > width;
 };
 
 const useSystemDispatch = () => {
@@ -125,18 +103,6 @@ const useSystemDispatch = () => {
 }
 
 const systemContext: { readonly current: SystemContext } = internalSystemContext;
-
-const styles = StyleSheet.create({
-  hidden: {
-    opacity: 0,
-    pointerEvents: 'none',
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  }
-});
 
 export {
   SystemConfigProvider,

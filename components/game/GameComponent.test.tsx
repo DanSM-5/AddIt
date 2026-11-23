@@ -6,7 +6,7 @@ import {
   within,
 } from '@testing-library/react-native';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { setColorScheme } from 'vitest-native/helpers';
+import { setColorScheme, setDimensions } from 'vitest-native/helpers';
 
 import { Colors } from '@/constants/Colors';
 import type { NumbersSet } from '@/utils/numbersSetGenerator';
@@ -25,6 +25,8 @@ const TIME_LIMIT = 8; // seconds (not a number on the board)
 // Board: 3 7 5 1 — target 10, pre-computed answer 3 + 7 (positions 0 and 1)
 const NUMBERS: NumbersSet = [10, [3, 7, 5, 1], [3, 7], [0, 1]];
 const light = Colors.light;
+const PORTRAIT = { width: 390, height: 844 };
+const LANDSCAPE = { width: 844, height: 390 };
 
 /** Animated colours come out of interpolateColor as `rgba(r, g, b, 1)`. */
 const rgba = (hex: string) => {
@@ -62,15 +64,29 @@ const renderGame = async () => {
   return { onVictory, onPlayAgain };
 };
 
+/** Let the timer run out. */
+const runOutOfTime = async () => {
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(TIME_LIMIT * 1000);
+  });
+  // NumericTimer reports the end with a setTimeout(0) scheduled during the
+  // last state update, so give it one more tick.
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(1);
+  });
+};
+
 beforeEach(() => {
   vi.useFakeTimers();
   setColorScheme('light');
+  setDimensions(PORTRAIT);
   vi.mocked(withRepeat).mockClear();
 });
 
 afterEach(() => {
   vi.useRealTimers();
   setColorScheme(null);
+  setDimensions(PORTRAIT);
 });
 
 describe('GameComponent', () => {
@@ -114,14 +130,7 @@ describe('GameComponent', () => {
     const { onVictory, onPlayAgain } = await renderGame();
 
     await fireEvent.press(button(2)); // 5, a wrong pick
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(TIME_LIMIT * 1000);
-    });
-    // NumericTimer reports the end with a setTimeout(0) scheduled during the
-    // last state update, so give it one more tick.
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(1);
-    });
+    await runOutOfTime();
 
     expect(screen.getByText('Fail: 10')).toBeOnTheScreen();
 
@@ -153,5 +162,44 @@ describe('GameComponent', () => {
 
     expect(screen.getByText('Add: 10')).toBeOnTheScreen();
     expect(button(2)).toBeEnabled();
+  });
+
+  describe('orientation', () => {
+    const container = () => screen.getByTestId('game-container');
+    const playAgain = () => screen.getByTestId('play-again');
+
+    it('stacks the layout vertically in portrait', async () => {
+      await renderGame();
+      await runOutOfTime();
+
+      expect(container()).not.toHaveStyle({ flexDirection: 'row' });
+      expect(screen.getByText('Answer:', { exact: false })).toBeOnTheScreen();
+      expect(playAgain()).toHaveStyle({ width: PORTRAIT.width * 0.8 });
+    });
+
+    it('places header, numbers and button side by side in landscape', async () => {
+      setDimensions(LANDSCAPE);
+      await renderGame();
+      await runOutOfTime();
+
+      expect(container()).toHaveStyle({ flexDirection: 'row' });
+      expect(screen.getByText('A:', { exact: false })).toBeOnTheScreen();
+      expect(playAgain()).toHaveStyle({ width: LANDSCAPE.width * 0.15 });
+    });
+
+    it('follows the window when it rotates or resizes', async () => {
+      await renderGame();
+      await runOutOfTime();
+
+      await act(async () => setDimensions(LANDSCAPE));
+      expect(container()).toHaveStyle({ flexDirection: 'row' });
+
+      // a wider landscape window (e.g. a resized desktop window) resizes the button
+      await act(async () => setDimensions({ width: 1200, height: 390 }));
+      expect(playAgain()).toHaveStyle({ width: 1200 * 0.15 });
+
+      await act(async () => setDimensions(PORTRAIT));
+      expect(container()).not.toHaveStyle({ flexDirection: 'row' });
+    });
   });
 });

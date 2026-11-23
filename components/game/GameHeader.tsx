@@ -1,7 +1,7 @@
 // @ts-check
 
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { useIsPortrait, useLanguage } from '@/providers/SystemConfig';
 import { GameStatus } from '@/constants/GameStatus';
 import { Difficulty } from '@/language';
@@ -31,7 +31,7 @@ const GameHeader = ({
     WON: { backgroundColor: colors.statusWon, color: colors.onStatus },
     LOST: { backgroundColor: colors.statusLost, color: colors.onStatus },
   }[status];
-  const { width } = Dimensions.get('window');
+  const { width } = useWindowDimensions();
   const dynamicStyles = StyleSheet.create({
     targetPortrait: {
       width: width * 0.8,

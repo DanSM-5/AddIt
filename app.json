@@ -3,7 +3,7 @@
     "name": "AddIt",
     "slug": "AddIt",
     "version": "1.4.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "addit",
     "userInterfaceStyle": "automatic",
