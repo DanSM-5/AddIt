@@ -107,8 +107,10 @@ const RandomNumber = ({
       onPress={handlePress}
       disabled={!isActive}
       style={styles.touchable}
+      testID={`random-number-${id}`}
     >
       <Animated.View
+        testID={`random-number-${id}-circle`}
         style={[
           styles["number-container"],
           { borderColor: colors.outline },

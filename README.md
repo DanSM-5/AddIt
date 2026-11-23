@@ -145,9 +145,26 @@ npm run lint:types    # type-check with TypeScript 7 (native compiler)
 npm run lint          # ESLint
 ```
 
-Unit tests (`*.test.ts`) cover plain TypeScript logic and run in Node with
-[Vitest](https://vitest.dev). Vite is only used by the test runner; the app is
-still bundled by Metro.
+Tests run with [Vitest](https://vitest.dev) in two projects (Vite is only used
+by the test runner; the app is still bundled by Metro):
+
+- `unit` — `*.test.ts`, plain TypeScript logic in Node.
+- `native` — `*.test.tsx`, React Native components rendered with
+  [React Native Testing Library](https://callstack.github.io/react-native-testing-library/)
+  through [vitest-native](https://vitest-native.danfry.dev/), on React Native's
+  real JavaScript with native modules mocked. Setup lives in
+  `test/setup-native.ts`.
+
+Run a single project with `npx vitest run --project native`.
+
+> [!IMPORTANT]
+> vitest-native needs Node 22.22.3+ (or 24.12+). Use the version in `.nvmrc`
+> (`nvm use`).
+
+> [!NOTE]
+> Reanimated's test mock finishes animations immediately, so tests check that
+> an animation starts (e.g. by spying on `withRepeat`) rather than its
+> intermediate frames. Animated colours are reported as `rgba(r, g, b, 1)`.
 
 > [!NOTE]
 > TypeScript 7 is installed under the `typescript-7` alias and used only for
