@@ -13,7 +13,7 @@ const appJsonPath = join(root, "app.json");
 const appJson = JSON.parse(readFileSync(appJsonPath));
 appJson.expo.version = version;
 appJson.expo.android.versionCode += 1;
-writeFileSync(appJsonPath, JSON.stringify(appJson, null, 2), {
+writeFileSync(appJsonPath, JSON.stringify(appJson, null, 2) + "\n", {
   encoding: "utf-8",
   flag: "w",
 });
